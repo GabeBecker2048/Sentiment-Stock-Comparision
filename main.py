@@ -2,6 +2,18 @@ import tkinter as tk
 from tkinter import ttk
 import json
 
+from lib.commands import *
+
+filename = "lib/settings.json"
+try:
+    with open(filename, 'r') as file:
+        settings = json.load(file)
+except FileNotFoundError:
+    print(f"Settings file '{filename}' not found.")
+except json.JSONDecodeError as e:
+    print(f"Error decoding JSON: {e}")
+
+
 def on_validate(value, action):
     if action == '1':  # Insert
         try:
@@ -22,7 +34,10 @@ def on_item_click(index, right_frame):
         run_button.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
     elif index == 2:
-        gen_sent_report_button = ttk.Button(right_frame, padding=(10, 10), text="Generate Sentiment Report", command="")
+        gen_sent_report_button = ttk.Button(right_frame,
+                                            padding=(10, 10),
+                                            text="Generate Sentiment Report",
+                                            command=lambda: generate_articles(settings))
         gen_sent_report_button.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
     elif index == 3:
@@ -42,17 +57,6 @@ def on_item_click(index, right_frame):
     elif index == 5:
         pass
     elif index == 6:
-
-        filename = "lib/settings.json"
-        try:
-            with open(filename, 'r') as file:
-                settings = json.load(file)
-        except FileNotFoundError:
-            print(f"Settings file '{filename}' not found.")
-            return None
-        except json.JSONDecodeError as e:
-            print(f"Error decoding JSON: {e}")
-            return None
 
         # Create a list of options for the dropdown
         options = ["Hourly", "Daily", "Weekly", "Monthly"]
@@ -74,6 +78,7 @@ def on_item_click(index, right_frame):
 
     else:
         print("Invalid index!")
+
 
 def main():
     root = tk.Tk()
@@ -106,6 +111,7 @@ def main():
         button.pack(fill=tk.X)
 
     root.mainloop()
+
 
 if __name__ == "__main__":
     main()
