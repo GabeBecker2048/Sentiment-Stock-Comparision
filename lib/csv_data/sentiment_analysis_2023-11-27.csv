@@ -1,0 +1,50 @@
+"","Search.Term","negative","positive","sentiment_score"
+"1","Abbott Laboratories",8,10,2
+"2","AbbVie",2,7,5
+"3","Adobe",6,14,8
+"4","Alphabet (Google)",8,7,-1
+"5","Amazon",7,9,2
+"6","AMD",4,13,9
+"7","Amgen",2,2,0
+"8","Apple",2,7,5
+"9","Bank of America",3,5,2
+"10","Berkshire Hathaway",10,9,-1
+"11","Broadcom",2,2,0
+"12","Chevron",9,5,-4
+"13","Cisco",9,8,-1
+"14","Coca-Cola",6,7,1
+"15","Comcast",4,7,3
+"16","Costco",12,15,3
+"17","Danaher",4,4,0
+"18","Eli Lilly",10,7,-3
+"19","Exxon Mobil",5,7,2
+"20","Home Depot",6,12,6
+"21","IBM",7,6,-1
+"22","Intel",6,5,-1
+"23","Intuit",6,3,-3
+"24","Johnson & Johnson",10,9,-1
+"25","JPMorgan Chase",4,4,0
+"26","Mastercard",3,5,2
+"27","McDonald",9,1,-8
+"28","Meta Platforms (Facebook)",7,2,-5
+"29","Microsoft",5,12,7
+"30","Netflix",5,16,11
+"31","Nike",4,5,1
+"32","NVIDIA",12,11,-1
+"33","Oracle",10,9,-1
+"34","Pepsico",8,7,-1
+"35","Pfizer",10,4,-6
+"36","Philip Morris",4,5,1
+"37","Procter & Gamble",0,7,7
+"38","QUALCOMM",4,16,12
+"39","Salesforce",0,6,6
+"40","T-Mobile US",8,6,-2
+"41","Tesla",8,5,-3
+"42","Texas Instruments",4,11,7
+"43","Thermo Fisher Scientific",7,9,2
+"44","UnitedHealth",13,7,-6
+"45","Verizon",3,18,15
+"46","Visa",7,10,3
+"47","Walmart",3,8,5
+"48","Walt Disney",8,4,-4
+"49","Wells Fargo",2,6,4
