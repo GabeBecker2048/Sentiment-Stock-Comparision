@@ -1,8 +1,9 @@
 import tkinter as tk
 from tkinter import ttk
+from tkinter.scrolledtext import ScrolledText
 import json
-
-from lib.commands import *
+import threading
+from lib.commands import RedirectText, generate_sentiment_report
 
 filename = "lib/settings.json"
 try:
@@ -24,67 +25,31 @@ def on_validate(value, action):
     return True
 
 
-def on_item_click(index, right_frame):
+def on_item_click(index, right_frame, terminal: RedirectText):
 
     for widget in right_frame.winfo_children():
-        widget.destroy()
+        widget.place_forget()
 
     if index == 1:
         run_button = ttk.Button(right_frame, padding=(10, 10), text="Run", command="")
-        run_button.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+        run_button.place(relx=0.5, rely=0.25, anchor=tk.CENTER)
+        terminal.output.place(relx=0.5, rely=0.4, anchor=tk.N)
 
     elif index == 2:
         gen_sent_report_button = ttk.Button(right_frame,
                                             padding=(10, 10),
                                             text="Generate Sentiment Report",
-                                            command=lambda: generate_articles(settings))
-        gen_sent_report_button.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+                                            command=lambda: threading.Thread(target=generate_sentiment_report, args=(settings, terminal)).start()
+                                            )
+        gen_sent_report_button.place(relx=0.5, rely=0.25, anchor=tk.CENTER)
+        terminal.output.place(relx=0.5, rely=0.4, anchor=tk.N)
 
-    elif index == 3:
-        gen_stock_report_button = ttk.Button(right_frame, padding=(10, 10), text="Generate Stock Report", command="")
-        gen_stock_report_button.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
-
-    elif index == 4:
-        gen_graph1_button = ttk.Button(right_frame, padding=(10, 10), text="Generate graph type 1", command="")
-        gen_graph1_button.place(relx=0.25, rely=0.5, anchor=tk.CENTER)
-
-        gen_graph2_button = ttk.Button(right_frame, padding=(10, 10), text="Generate graph type 2", command="")
-        gen_graph2_button.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
-
-        gen_graph3_button = ttk.Button(right_frame, padding=(10, 10), text="Generate graph type 3", command="")
-        gen_graph3_button.place(relx=0.75, rely=0.5, anchor=tk.CENTER)
-
-    elif index == 5:
-        pass
-    elif index == 6:
-
-        # Create a list of options for the dropdown
-        options = ["Hourly", "Daily", "Weekly", "Monthly"]
-
-        # Create a Combobox
-        runreport_combobox = ttk.Combobox(right_frame, values=options, state="readonly")
-        runreport_combobox.place(relx=0.25, rely=0.25, anchor=tk.CENTER)
-
-        # Set a default value
-        runreport_combobox.set(settings["RunReport"])
-
-        validate_cmd = (right_frame.register(on_validate), '%P', '%d')
-        numarticles_entry = ttk.Entry(right_frame, validate='key', validatecommand=validate_cmd)
-        numarticles_entry.place(relx=0.75, rely=0.25)
-        numarticles_entry.insert(0, str(settings["NumArticles"]))
-
-        save_button = ttk.Button(right_frame, padding=(2, 2), text="Save", command='')
-        save_button.place(relx=0.95, rely=0.97, anchor=tk.CENTER)
-
-    else:
-        print("Invalid index!")
 
 
 def main():
     root = tk.Tk()
     root.geometry("1000x500")
 
-    # Left frame for buttons and canvas
     left_frame = ttk.Frame(root)
     left_frame.pack(side=tk.LEFT, padx=10, pady=10, fill=tk.BOTH)
 
@@ -106,12 +71,22 @@ def main():
         "Settings",
     ]
 
+    # create terminal
+    terminal_text = ScrolledText(
+        right_frame,
+        wrap=tk.WORD,
+        width=80,
+        height=15,
+        bg='black',  # Set background color to black
+        fg='white'   # Set text color to white
+    )
+    terminal = RedirectText(terminal_text)
+
     for index, text in enumerate(buttons, start=1):
-        button = ttk.Button(frame, text=text, padding=(10, 10), command=lambda i=index: on_item_click(i, right_frame))
+        button = ttk.Button(frame, text=text, padding=(10, 10), command=lambda i=index: on_item_click(i, right_frame, terminal))
         button.pack(fill=tk.X)
 
     root.mainloop()
-
 
 if __name__ == "__main__":
     main()
