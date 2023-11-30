@@ -2,7 +2,7 @@
     "NumArticles": 20,
     "RunReport": "Daily",
     "Running": false,
-    "RScriptLocation": "C:/Program Files/R/R-4.3.2/bin/Rscript.exe",
+    "RScriptLocation": "Rscript",
     "SearchTerms": ["Apple",
                     "Microsoft",
                     "Alphabet (Google)",
