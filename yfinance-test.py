@@ -66,6 +66,7 @@ five_days_ago_str = five_days_ago.strftime('%Y-%m-%d')
 # Initialize lists for current and previous day prices
 current_prices = []
 previous_prices = []
+differences = []
 
 # Iterate over stocks
 for stock_name, stock_symbol in stocks_dict.items():
@@ -82,10 +83,14 @@ for stock_name, stock_symbol in stocks_dict.items():
     # Get the last two days' prices
     previous_price = hist['Close'].iloc[-2]
     current_price = hist['Close'].iloc[-1]
+    difference = current_price - previous_price
 
     # Append prices to lists
     previous_prices.append((stock_name, previous_price))
     current_prices.append((stock_name, current_price))
+    differences.append((stock_name, current_price - previous_price))
 
-print('Previous day prices:', previous_prices)
-print('Current prices:', current_prices)
+
+print('PREVIOUS DAY PRICES: ', previous_prices)
+print('CURRENT PRICES: ', current_prices)
+print('DIFFERENCES: ', differences)
