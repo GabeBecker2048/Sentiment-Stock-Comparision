@@ -29,7 +29,7 @@ def generate_articles(settings: Settings, output: RedirectText):
     
     # Searching and saving
     csv_data = []
-    for search in settings.s["SearchTerms"]:
+    for search in settings.s["SearchTerms"].keys():
 
         output.write(f"\t\nGenerating news for {search}...\n")
         inews = news.get_news(search)
