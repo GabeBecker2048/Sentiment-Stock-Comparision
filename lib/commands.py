@@ -3,6 +3,7 @@ import subprocess
 from gnews import GNews
 from datetime import datetime, date
 import tkinter as tk
+from lib.settings import Settings
 
 
 class RedirectText:
@@ -19,16 +20,16 @@ class RedirectText:
             self.write(line)
 
 
-def generate_articles(settings: dict, output: RedirectText):
+def generate_articles(settings: Settings, output: RedirectText):
     output.write("Generating articles...\n")
 
     # Configuration
     news = GNews()
-    news.max_results = settings["NumArticles"]
+    news.max_results = settings.s["NumArticles"]
     
     # Searching and saving
     csv_data = []
-    for search in settings["SearchTerms"]:
+    for search in settings.s["SearchTerms"]:
 
         output.write(f"\t\nGenerating news for {search}...\n")
         inews = news.get_news(search)
@@ -47,17 +48,17 @@ def generate_articles(settings: dict, output: RedirectText):
                 formatted_date = date_str
 
             row.extend([title, formatted_date])
-            output.write(f"{title} + {formatted_date}, ")
+            output.write(f"{title} - {formatted_date}, ")
         output.write('\n')
 
         # Fill the remaining columns with empty strings if there are fewer than settings["NumArticles"] articles
-        row += ['', ''] * (settings["NumArticles"] - len(inews))
+        row += ['', ''] * (settings.s["NumArticles"] - len(inews))
     
         csv_data.append(row)
     
     # Writing to CSV file
     csv_header = ['Search Term']
-    for i in range(settings["NumArticles"]):
+    for i in range(settings.s["NumArticles"]):
         csv_header.extend([f"article {i + 1}", f"date {i + 1}"])
 
 
@@ -70,10 +71,10 @@ def generate_articles(settings: dict, output: RedirectText):
     output.write("Articles Generated!\n")
 
 
-def generate_sentiment_report(settings: dict, output: RedirectText):
+def generate_sentiment_report(settings: Settings, output: RedirectText):
 
     try:
-        #generate_articles(settings, output)
+        generate_articles(settings, output)
 
         output.write("\nGenerating Sentiment report...\n")
 
@@ -84,7 +85,7 @@ def generate_sentiment_report(settings: dict, output: RedirectText):
         output.write("\tRunning R Script 1...\n")
 
         # Run the R script using subprocess
-        process = subprocess.Popen([settings["RScriptLocation"], r_script_path1],
+        process = subprocess.Popen([settings.s["RScriptLocation"], r_script_path1],
                                    stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
         # wait for process to finish
@@ -95,7 +96,7 @@ def generate_sentiment_report(settings: dict, output: RedirectText):
         output.write("\tRunning R Script 2...\n")
 
         # Run the R script using subprocess
-        process = subprocess.Popen([settings["RScriptLocation"], r_script_path2],
+        process = subprocess.Popen([settings.s["RScriptLocation"], r_script_path2],
                                    stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
         # wait for process to finish
