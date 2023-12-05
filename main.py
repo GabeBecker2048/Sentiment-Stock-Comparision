@@ -1,18 +1,9 @@
 import tkinter as tk
 from tkinter import ttk
 from tkinter.scrolledtext import ScrolledText
-import json
 import threading
 from lib.commands import RedirectText, generate_sentiment_report
-
-filename = "lib/settings.json"
-try:
-    with open(filename, 'r') as file:
-        settings = json.load(file)
-except FileNotFoundError:
-    print(f"Settings file '{filename}' not found.")
-except json.JSONDecodeError as e:
-    print(f"Error decoding JSON: {e}")
+from lib.settings import Settings
 
 
 def on_validate(value, action):
@@ -25,7 +16,8 @@ def on_validate(value, action):
     return True
 
 
-def on_item_click(index, right_frame, terminal: RedirectText):
+def on_item_click(index, right_frame, terminal: RedirectText, settings: Settings):
+    settings.hide_widgets()
 
     for widget in right_frame.winfo_children():
         widget.place_forget()
@@ -44,6 +36,9 @@ def on_item_click(index, right_frame, terminal: RedirectText):
         gen_sent_report_button.place(relx=0.5, rely=0.25, anchor=tk.CENTER)
         terminal.output.place(relx=0.5, rely=0.4, anchor=tk.N)
 
+    elif index == 6:
+        settings.show_widgets()
+        settings.reset_widgets()
 
 
 def main():
@@ -62,12 +57,14 @@ def main():
     right_frame = ttk.Frame(root)
     right_frame.pack(side=tk.RIGHT, padx=10, pady=10, fill=tk.BOTH, expand=True)
 
+    settings = Settings("./lib/settings.json", right_frame)
+
     buttons = [
         "Run",
-        "Generate Daily Sentiment Report",
-        "Generate Daily Stock Report",
-        "Graph Generation",
-        "Sentiment vs Stock",
+        "Generate Sentiment Report",
+        "Generate Stock Report",
+        "Generate Graph",
+        "Graphs",
         "Settings",
     ]
 
@@ -83,10 +80,11 @@ def main():
     terminal = RedirectText(terminal_text)
 
     for index, text in enumerate(buttons, start=1):
-        button = ttk.Button(frame, text=text, padding=(10, 10), command=lambda i=index: on_item_click(i, right_frame, terminal))
+        button = ttk.Button(frame, text=text, padding=(10, 10), command=lambda i=index: on_item_click(i, right_frame, terminal, settings))
         button.pack(fill=tk.X)
 
     root.mainloop()
+
 
 if __name__ == "__main__":
     main()
