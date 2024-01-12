@@ -35,12 +35,23 @@ class Settings:
         for widget in self.widget_list:
             widget.pack()
 
+    def validate_num_articles(self, new_value):
+        # Validation callback to allow only numeric input for NumArticles
+        try:
+            if new_value == "":
+                return True  # Allow empty entry
+            int_value = int(new_value)
+            return True
+        except ValueError:
+            return False
+
     def create_widgets(self):
         # NumArticles
         l1 = tk.Label(self.frame, text="NumArticles:")
         self.widget_list.append(l1)
         self.num_articles_entry = tk.Entry(self.frame)
         self.num_articles_entry.insert(0, str(self.s["NumArticles"]))
+        self.num_articles_entry.config(validate="key", validatecommand=(self.frame.register(self.validate_num_articles), '%P'))
         self.widget_list.append(self.num_articles_entry)
 
         # RunReport
@@ -48,7 +59,8 @@ class Settings:
         self.widget_list.append(l2)
         self.run_report_var = tk.StringVar(self.frame)
         self.run_report_var.set(self.s["RunReport"])
-        self.run_report_dropdown = ttk.Combobox(self.frame, values=["Daily", "Weekly", "Monthly", "Yearly"])
+        self.run_report_dropdown = ttk.Combobox(self.frame, values=["Daily", "Weekly", "Monthly", "Yearly"],
+                                                state="readonly")
         self.run_report_dropdown.set(self.s["RunReport"])
         self.widget_list.append(self.run_report_dropdown)
 
