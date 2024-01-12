@@ -1,5 +1,6 @@
 import yfinance as yf
 from datetime import datetime, timedelta
+import csv
 
 # Dictionary of stocks
 stocks_dict = {
@@ -86,11 +87,17 @@ for stock_name, stock_symbol in stocks_dict.items():
     difference = current_price - previous_price
 
     # Append prices to lists
-    previous_prices.append((stock_name, previous_price))
-    current_prices.append((stock_name, current_price))
-    differences.append((stock_name, current_price - previous_price))
+    previous_prices.append((previous_price))
+    current_prices.append((current_price))
+    differences.append((current_price - previous_price))
 
 
 print('PREVIOUS DAY PRICES: ', previous_prices)
 print('CURRENT PRICES: ', current_prices)
 print('DIFFERENCES: ', differences)
+
+with open("prices.csv", "w") as f:
+    w = csv.writer(f, delimiter=",")
+    for values in zip(stocks_dict, previous_prices, current_prices, differences):
+        w.writerow(values)
+
