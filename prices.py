@@ -79,6 +79,10 @@ for stock_name, stock_symbol in stocks_dict.items():
     # Check if there are enough data points
     if len(hist) < 2:
         print(f"Not enough data for {stock_name}")
+        # Append zeros to lists
+        previous_prices.append(0)
+        current_prices.append(0)
+        differences.append(0)
         continue
 
     # Get the last two days' prices
