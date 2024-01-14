@@ -80,9 +80,9 @@ for stock_name, stock_symbol in stocks_dict.items():
     if len(hist) < 2:
         print(f"Not enough data for {stock_name}")
         # Append zeros to lists
-        previous_prices.append(0)
-        current_prices.append(0)
-        differences.append(0)
+        previous_prices.append("NaN")
+        current_prices.append("NaN")
+        differences.append("NaN")
         continue
 
     # Get the last two days' prices
