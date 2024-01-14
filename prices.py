@@ -100,4 +100,3 @@ with open("prices.csv", "w", newline='') as f:
     w = csv.writer(f, delimiter=",", lineterminator='\r\n')
     for values in zip(stocks_dict, previous_prices, current_prices, differences):
         w.writerow(values)
-
