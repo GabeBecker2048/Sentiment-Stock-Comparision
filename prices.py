@@ -100,7 +100,12 @@ print('PREVIOUS DAY PRICES: ', previous_prices)
 print('CURRENT PRICES: ', current_prices)
 print('DIFFERENCES: ', differences)
 
-with open("prices.csv", "w", newline='') as f:
+# Format as a string
+timestamp_str = today.strftime("%Y-%m-%d_%H-%M-%S")
+# Use in file name
+file_name = f"prices_{timestamp_str}.csv"
+
+with open(file_name, "w", newline='') as f:
     w = csv.writer(f, delimiter=",", lineterminator='\r\n')
     for values in zip(stocks_dict, previous_prices, current_prices, differences):
         w.writerow(values)
