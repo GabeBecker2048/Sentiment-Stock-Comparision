@@ -4,7 +4,7 @@ from tkinter.scrolledtext import ScrolledText
 from tkinter import filedialog
 import threading
 
-from lib.commands import generate_sentiment_report, generate_stock_report
+from lib.commands import *
 from lib.settings import Settings
 
 
