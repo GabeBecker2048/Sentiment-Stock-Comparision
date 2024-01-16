@@ -4,7 +4,7 @@ from tkinter.scrolledtext import ScrolledText
 from tkinter import filedialog
 import threading
 
-from lib.commands import generate_sentiment_report
+from lib.commands import generate_sentiment_report, generate_stock_report
 from lib.settings import Settings
 
 
@@ -191,7 +191,7 @@ class Root:
                                                 text="Generate Sentiment Report",
                                                 command=lambda: threading.Thread(
                                                     target=generate_sentiment_report,
-                                                    args=(settings, self.terminals[1])).start()
+                                                    args=(settings)).start()
                                                 )
             gen_sent_report_button.place(relx=0.5, rely=0.25, anchor=tk.CENTER)
             self.terminals[1].output.place(relx=0.5, rely=0.4, anchor=tk.N)
@@ -199,10 +199,10 @@ class Root:
         elif index == 3:
             gen_stock_report_button = ttk.Button(self.right_frame,
                                                  padding=(10, 10),
-                                                 text="Generate Sentiment Report",
+                                                 text="Generate Stock Report",
                                                  command=lambda: threading.Thread(
-                                                    target=generate_sentiment_report,
-                                                    args=(settings, self.terminals[2])).start()
+                                                    target=generate_stock_report,
+                                                    args=(settings)).start()
                                                  )
             gen_stock_report_button.place(relx=0.5, rely=0.25, anchor=tk.CENTER)
             self.terminals[2].output.place(relx=0.5, rely=0.4, anchor=tk.N)
