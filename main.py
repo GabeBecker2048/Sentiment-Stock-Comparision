@@ -4,7 +4,8 @@ from sys import argv
 
 def main():
 
-    if '-gui' in argv:
+    largv = [str(arg).lower() for arg in argv]
+    if '-gui' in largv:
         root = Root("./lib/settings.json")
         root.root.mainloop()
         return
