@@ -7,6 +7,21 @@ import yfinance as yf
 from lib.settings import Settings
 
 
+def run_R_Script(r_script_path: str, RScriptLocation: str = "Rscript", outstream=None):
+    print(f"\tRunning {r_script_path}...\n", file=outstream)
+
+    # Run the R script using subprocess
+    process = subprocess.Popen([RScriptLocation, r_script_path],
+                               stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+
+    # wait for process to finish
+    out, errors = process.communicate()
+    print(f"Output: {out}\n", file=outstream)
+    print(f"Errors: {errors}\n", file=outstream)
+
+    print(f"\tFinished running {r_script_path}!\n", file=outstream)
+
+
 def generate_articles(settings: Settings, outstream=None):
     print("Generating articles...\n", file=outstream)
 
@@ -69,31 +84,10 @@ def generate_sentiment_report(settings: Settings, outstream=None):
         r_script_path1 = './lib/RScripts/sentiment_analysis.R'
         r_script_path2 = './lib/RScripts/graph_sentiment.R'
 
-        print("\tRunning R Script 1...\n", file=outstream)
-
-        # Run the R script using subprocess
-        process = subprocess.Popen([settings["RScriptLocation"], r_script_path1],
-                                   stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-
-        # wait for process to finish
-        out, errors = process.communicate()
-        print(f"Output: {out}\n", file=outstream)
-        print(f"Errors: {errors}\n", file=outstream)
-
-        print("\tRunning R Script 2...\n", file=outstream)
-
-        # Run the R script using subprocess
-        process = subprocess.Popen([settings["RScriptLocation"], r_script_path2],
-                                   stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-
-        # wait for process to finish
-        out, errors = process.communicate()
-        print(f"Output: {out}\n", file=outstream)
-        print(f"Errors: {errors}\n", file=outstream)
+        run_R_Script(r_script_path1, settings["RScriptLocation"], outstream)
+        run_R_Script(r_script_path2, settings["RScriptLocation"], outstream)
 
         print("R Scripts finished!\n", file=outstream)
-
-        print("Successfully created Sentiment Report!\n", file=outstream)
 
     except Exception as e:
         print(f"Error: {e}", file=outstream)
@@ -146,7 +140,7 @@ def generate_stock_report(settings: Settings, outstream=None):
     print('DIFFERENCES: ', differences, file=outstream)
 
     # Format as a string
-    timestamp_str = today.strftime("%Y-%m-%d_%H-%M-%S")
+    timestamp_str = today.strftime("%Y-%m-%d")
     # Use in file name
     file_name = f"./lib/csv_data/prices_{timestamp_str}.csv"
 
@@ -156,3 +150,14 @@ def generate_stock_report(settings: Settings, outstream=None):
             w.writerow(values)
 
     print(f'\nSuccessfully created stock data as {file_name}', file=outstream)
+
+    print(f"Creating stock data..", file=outstream)
+
+    """
+    rscript_path = "./lib/Rscipts/stock_analysis.R"
+    run_R_Script(rscript_path, settings["RScriptLocation"], outstream)
+    print("R scripts finished!", file=outstream)
+    """
+
+    print("Finished stock report!", file=outstream)
+

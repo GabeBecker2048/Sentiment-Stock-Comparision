@@ -18,5 +18,5 @@ ggplot(sentiment_analysis_top50, aes(x = Search.Term, y = sentiment_score, fill 
   ggtitle("Public Sentiment Score of 50 wealthy companies") +
   theme(axis.text.x = element_text(angle = 80, hjust = 1))
 
-# Save the ggplot as an image in the ./graphs/ directory with today's date
+# Save the ggplot as an image in the ./lib/graphs/ directory with today's date
 ggsave(paste("./lib/graphs/Top50_", today_date, ".png", sep = ""), width = 10, height = 4)

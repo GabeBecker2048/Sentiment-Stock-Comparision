@@ -72,7 +72,7 @@ class SettingsGUI(Settings):
         l4 = tk.Label(self.frame, text="SearchTerms:")
         self.widget_list.append(l4)
 
-        search_entries = [term + "," + self["SearchTerms"][term] for term in self["SearchTerms"]]
+        search_entries = [stock_name + "," + stock_symbol for stock_name, stock_symbol in self["SearchTerms"].items()]
         self.search_terms_entry.insert(tk.END, "\n".join(search_entries))
 
         self.widget_list.append(self.search_terms_entry)
@@ -93,7 +93,7 @@ class SettingsGUI(Settings):
         self.rscript_location_entry.insert(0, self["RScriptLocation"])
 
         self.search_terms_entry.delete("1.0", tk.END)
-        search_entries = [term + "," + self["SearchTerms"][term] for term in self["SearchTerms"]]
+        search_entries = [stock_name + "," + stock_symbol for stock_name, stock_symbol in self["SearchTerms"].items()]
         self.search_terms_entry.insert(tk.END, "\n".join(search_entries))
 
     def hide_widgets(self):
