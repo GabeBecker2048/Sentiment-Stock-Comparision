@@ -73,10 +73,12 @@ def generate_articles(settings: Settings, outstream=None):
     print("Articles Generated!\n", file=outstream)
 
 
-def generate_sentiment_report(settings: Settings, outstream=None):
+def generate_sentiment_report(settings: Settings, outstream=None, gen_articles: bool = True):
 
     try:
-        generate_articles(settings, outstream)
+        # generates the articles before generating the sentiment report
+        if gen_articles:
+            generate_articles(settings, outstream)
 
         print("\nGenerating Sentiment report...\n", file=outstream)
 
@@ -151,9 +153,8 @@ def generate_stock_report(settings: Settings, outstream=None):
 
     print(f'\nSuccessfully created stock data as {file_name}', file=outstream)
 
-    print(f"Creating stock data..", file=outstream)
-
     """
+    print(f"Creating stock analysis...", file=outstream)
     rscript_path = "./lib/Rscipts/stock_analysis.R"
     run_R_Script(rscript_path, settings["RScriptLocation"], outstream)
     print("R scripts finished!", file=outstream)
