@@ -1,9 +1,9 @@
 import tkinter as tk
 from tkinter import ttk
 from tkinter.scrolledtext import ScrolledText
+from tkinter import filedialog
 import threading
 
-import lib.settings
 from lib.commands import generate_sentiment_report
 from lib.settings import Settings
 
@@ -29,7 +29,7 @@ class Terminal:
             self.write(line)
 
 
-class SettingsGUI(lib.settings.Settings):
+class SettingsGUI(Settings):
     def __init__(self, filepath: str, right_frame: tk.Frame):
         super().__init__(filepath)
         self.frame = right_frame
@@ -71,7 +71,10 @@ class SettingsGUI(lib.settings.Settings):
         # SearchTerms
         l4 = tk.Label(self.frame, text="SearchTerms:")
         self.widget_list.append(l4)
-        self.search_terms_entry.insert(tk.END, "\n".join(self.s["SearchTerms"]))
+
+        search_entries = [term + "," + self["SearchTerms"][term] for term in self["SearchTerms"]]
+        self.search_terms_entry.insert(tk.END, "\n".join(search_entries))
+
         self.widget_list.append(self.search_terms_entry)
 
         # Save button
@@ -90,7 +93,8 @@ class SettingsGUI(lib.settings.Settings):
         self.rscript_location_entry.insert(0, self["RScriptLocation"])
 
         self.search_terms_entry.delete("1.0", tk.END)
-        self.search_terms_entry.insert(tk.END, "\n".join(self["SearchTerms"]))
+        search_entries = [term + "," + self["SearchTerms"][term] for term in self["SearchTerms"]]
+        self.search_terms_entry.insert(tk.END, "\n".join(search_entries))
 
     def hide_widgets(self):
         for widget in self.widget_list:
@@ -114,8 +118,8 @@ class SettingsGUI(lib.settings.Settings):
 
         SearchTerms = {}
         for term in self.search_terms_entry.get("1.0", tk.END).splitlines():
-            term.split("|")
-            SearchTerms[term[0]] = term[1]
+            splitterm = term.split(",")
+            SearchTerms[splitterm[0]] = splitterm[1]
         self["SearchTerms"] = SearchTerms
 
         # Save settings to file
@@ -137,7 +141,7 @@ class Root:
     def __init__(self, filepath: str):
 
         # sets up the window
-        self.root = tk.TK()
+        self.root = tk.Tk()
         self.root.geometry("1000x500")
 
         temp_frame = ttk.Frame(self.root)
