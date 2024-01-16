@@ -162,7 +162,7 @@ class Root:
             "Run",
             "Generate Sentiment Report",
             "Generate Stock Report",
-            "Generate Graph",
+            "Data",
             "Graphs",
             "Settings",
         ]
