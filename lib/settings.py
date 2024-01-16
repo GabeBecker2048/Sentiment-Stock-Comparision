@@ -43,3 +43,6 @@ class Settings:
             return
         except json.JSONDecodeError:
             return
+
+class SettingsException(Exception):
+    pass
