@@ -2,7 +2,7 @@
     "NumArticles": 20,
     "RunReport": "Daily",
     "Running": false,
-    "RScriptLocation": "Rscript.exe",
+    "RScriptLocation": "Rscript",
     "SearchTerms": {
         "Apple": "AAPL",
         "Microsoft": "MSFT",
