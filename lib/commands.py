@@ -7,8 +7,8 @@ import yfinance as yf
 from lib.settings import Settings
 
 
-def generate_articles(settings: Settings):
-    print("Generating articles...\n")
+def generate_articles(settings: Settings, outstream=None):
+    print("Generating articles...\n", file=outstream)
 
     # Configuration
     news = GNews()
@@ -18,7 +18,7 @@ def generate_articles(settings: Settings):
     csv_data = []
     for search in settings["SearchTerms"].keys():
 
-        print(f"\t\nGenerating news for {search}...\n")
+        print(f"\t\nGenerating news for {search}...\n", file=outstream)
         inews = news.get_news(search)
         row = [search]
     
@@ -35,8 +35,8 @@ def generate_articles(settings: Settings):
                 formatted_date = date_str
 
             row.extend([title, formatted_date])
-            print(f"{title} - {formatted_date}, ")
-        print('\n')
+            print(f"{title} - {formatted_date}, ", file=outstream)
+        print('\n', file=outstream)
 
         # Fill the remaining columns with empty strings if there are fewer than settings["NumArticles"] articles
         row += ['', ''] * (settings["NumArticles"] - len(inews))
@@ -49,27 +49,27 @@ def generate_articles(settings: Settings):
         csv_header.extend([f"article {i + 1}", f"date {i + 1}"])
 
 
-    print(f"Saving articles to: './lib/csv_data/Top50_{str(date.today())}.csv'")
+    print(f"Saving articles to: './lib/csv_data/Top50_{str(date.today())}.csv'", file=outstream)
     with open(f"./lib/csv_data/Top50_{date.today()}.csv", "w", newline='', encoding='utf-8') as csvfile:
         csv_writer = csv.writer(csvfile)
         csv_writer.writerow(csv_header)
         csv_writer.writerows(csv_data)
 
-    print("Articles Generated!\n")
+    print("Articles Generated!\n", file=outstream)
 
 
-def generate_sentiment_report(settings: Settings):
+def generate_sentiment_report(settings: Settings, outstream=None):
 
     try:
-        generate_articles(settings)
+        generate_articles(settings, outstream)
 
-        print("\nGenerating Sentiment report...\n")
+        print("\nGenerating Sentiment report...\n", file=outstream)
 
         # the two paths to the R scripts
         r_script_path1 = './lib/RScripts/sentiment_analysis.R'
         r_script_path2 = './lib/RScripts/graph_sentiment.R'
 
-        print("\tRunning R Script 1...\n")
+        print("\tRunning R Script 1...\n", file=outstream)
 
         # Run the R script using subprocess
         process = subprocess.Popen([settings["RScriptLocation"], r_script_path1],
@@ -77,10 +77,10 @@ def generate_sentiment_report(settings: Settings):
 
         # wait for process to finish
         out, errors = process.communicate()
-        print(f"Output: {out}\n")
-        print(f"Errors: {errors}\n")
+        print(f"Output: {out}\n", file=outstream)
+        print(f"Errors: {errors}\n", file=outstream)
 
-        print("\tRunning R Script 2...\n")
+        print("\tRunning R Script 2...\n", file=outstream)
 
         # Run the R script using subprocess
         process = subprocess.Popen([settings["RScriptLocation"], r_script_path2],
@@ -88,17 +88,19 @@ def generate_sentiment_report(settings: Settings):
 
         # wait for process to finish
         out, errors = process.communicate()
-        print(f"Output: {out}\n")
-        print(f"Errors: {errors}\n")
+        print(f"Output: {out}\n", file=outstream)
+        print(f"Errors: {errors}\n", file=outstream)
 
-        print("R Scripts finished!\n")
+        print("R Scripts finished!\n", file=outstream)
+
+        print("Successfully created Sentiment Report!\n", file=outstream)
 
     except Exception as e:
-        print(f"Error: {e}")
+        print(f"Error: {e}", file=outstream)
 
 
-def generate_stock_report(settings: Settings):
-    print("Generating Stock Report...\n")
+def generate_stock_report(settings: Settings, outstream=None):
+    print("Generating Stock Report...\n", file=outstream)
 
     # Get today's date and the date five days ago
     today = datetime.now()
@@ -122,7 +124,7 @@ def generate_stock_report(settings: Settings):
 
         # Check if there are enough data points
         if len(hist) < 2:
-            print(f"Not enough data for {stock_name}")
+            print(f"Not enough data for {stock_name}", file=outstream)
             # Append zeros to lists
             previous_prices.append("NaN")
             current_prices.append("NaN")
@@ -139,9 +141,9 @@ def generate_stock_report(settings: Settings):
         current_prices.append(current_price)
         differences.append(difference)
 
-    print('PREVIOUS DAY PRICES: ', previous_prices)
-    print('CURRENT PRICES: ', current_prices)
-    print('DIFFERENCES: ', differences)
+    print('PREVIOUS DAY PRICES: ', previous_prices, file=outstream)
+    print('CURRENT PRICES: ', current_prices, file=outstream)
+    print('DIFFERENCES: ', differences, file=outstream)
 
     # Format as a string
     timestamp_str = today.strftime("%Y-%m-%d_%H-%M-%S")
@@ -152,3 +154,5 @@ def generate_stock_report(settings: Settings):
         w = csv.writer(f, delimiter=",", lineterminator='\r\n')
         for values in zip(settings["SearchTerms"], previous_prices, current_prices, differences):
             w.writerow(values)
+
+    print(f'\nSuccessfully created stock data as {file_name}', file=outstream)
