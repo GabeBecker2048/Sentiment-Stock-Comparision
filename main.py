@@ -6,16 +6,6 @@ from lib.commands import RedirectText, generate_sentiment_report
 from lib.settings import Settings
 
 
-def on_validate(value, action):
-    if action == '1':  # Insert
-        try:
-            int(value)
-            return True
-        except ValueError:
-            return False
-    return True
-
-
 def on_item_click(index, right_frame, terminal: RedirectText, settings: Settings):
     settings.hide_widgets()
 

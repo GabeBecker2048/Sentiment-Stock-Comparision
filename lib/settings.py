@@ -13,6 +13,12 @@ class Settings:
         # create the widgets
         self.create_widgets()
 
+    def __getitem__(self, item: str):
+        return self.s[item]
+
+    def __setitem__(self, key: str, value):
+        self.s[key] = value
+
     def reset_widgets(self):
         # Reset widget values to dictionary values
         self.num_articles_entry.delete(0, tk.END)
