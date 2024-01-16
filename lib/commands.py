@@ -146,7 +146,7 @@ def generate_stock_report(settings: Settings):
     # Format as a string
     timestamp_str = today.strftime("%Y-%m-%d_%H-%M-%S")
     # Use in file name
-    file_name = f"prices_{timestamp_str}.csv"
+    file_name = f"./lib/csv_data/prices_{timestamp_str}.csv"
 
     with open(file_name, "w", newline='') as f:
         w = csv.writer(f, delimiter=",", lineterminator='\r\n')

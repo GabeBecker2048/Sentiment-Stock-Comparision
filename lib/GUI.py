@@ -191,7 +191,7 @@ class Root:
                                                 text="Generate Sentiment Report",
                                                 command=lambda: threading.Thread(
                                                     target=generate_sentiment_report,
-                                                    args=(settings)).start()
+                                                    args=[settings]).start()
                                                 )
             gen_sent_report_button.place(relx=0.5, rely=0.25, anchor=tk.CENTER)
             self.terminals[1].output.place(relx=0.5, rely=0.4, anchor=tk.N)
@@ -202,7 +202,7 @@ class Root:
                                                  text="Generate Stock Report",
                                                  command=lambda: threading.Thread(
                                                     target=generate_stock_report,
-                                                    args=(settings)).start()
+                                                    args=[settings]).start()
                                                  )
             gen_stock_report_button.place(relx=0.5, rely=0.25, anchor=tk.CENTER)
             self.terminals[2].output.place(relx=0.5, rely=0.4, anchor=tk.N)
