@@ -151,9 +151,8 @@ def generate_stock_report(settings: Settings, outstream=None):
 
     print(f'\nSuccessfully created stock data as {file_name}', file=outstream)
 
-    print(f"Creating stock data..", file=outstream)
-
     """
+    print(f"Creating stock analysis...", file=outstream)
     rscript_path = "./lib/Rscipts/stock_analysis.R"
     run_R_Script(rscript_path, settings["RScriptLocation"], outstream)
     print("R scripts finished!", file=outstream)
