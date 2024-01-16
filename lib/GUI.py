@@ -4,7 +4,7 @@ from tkinter.scrolledtext import ScrolledText
 from tkinter import filedialog
 import threading
 
-from lib.commands import *
+from lib.utils import *
 from lib.settings import Settings
 
 
