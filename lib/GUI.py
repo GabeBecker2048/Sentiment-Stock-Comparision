@@ -3,6 +3,7 @@ from tkinter import ttk
 from tkinter.scrolledtext import ScrolledText
 import threading
 
+import lib.settings
 from lib.commands import generate_sentiment_report
 from lib.settings import Settings
 
@@ -28,28 +29,68 @@ class Terminal:
             self.write(line)
 
 
-class SettingsGUI:
-    def __init__(self, settings: Settings, right_frame: tk.Frame):
-        self.settings = settings
+class SettingsGUI(lib.settings.Settings):
+    def __init__(self, filepath: str, right_frame: tk.Frame):
+        super().__init__(filepath)
         self.frame = right_frame
         self.widget_list = []
+
+        self.num_articles_entry = tk.Entry(self.frame)
+        self.run_report_var = tk.StringVar(self.frame)
+        self.run_report_dropdown = ttk.Combobox(self.frame, values=["Daily", "Weekly", "Monthly", "Yearly"],
+                                                state="readonly")
+        self.rscript_location_entry = tk.Entry(self.frame)
+        self.search_terms_entry = tk.Text(self.frame, height=8, width=40)
 
         # create the widgets
         self.create_widgets()
 
+    def create_widgets(self):
+        # NumArticles
+        l1 = tk.Label(self.frame, text="NumArticles:")
+        self.widget_list.append(l1)
+        self.num_articles_entry.insert(0, str(self["NumArticles"]))
+        self.num_articles_entry.config(validate="key", validatecommand=(self.frame.register(self.validate_num_articles), '%P'))
+        self.widget_list.append(self.num_articles_entry)
+
+        # RunReport
+        l2 = tk.Label(self.frame, text="RunReport:")
+        self.widget_list.append(l2)
+        self.run_report_var.set(self["RunReport"])
+        self.run_report_dropdown.set(self["RunReport"])
+        self.widget_list.append(self.run_report_dropdown)
+
+        # RScriptLocation
+        l3 = tk.Label(self.frame, text="RScriptLocation:")
+        self.widget_list.append(l3)
+        self.rscript_location_entry.insert(0, self["RScriptLocation"])
+        self.widget_list.append(self.rscript_location_entry)
+        browse = tk.Button(self.frame, text="Browse", command=self.browse_rscript_location)
+        self.widget_list.append(browse)
+
+        # SearchTerms
+        l4 = tk.Label(self.frame, text="SearchTerms:")
+        self.widget_list.append(l4)
+        self.search_terms_entry.insert(tk.END, "\n".join(self.s["SearchTerms"]))
+        self.widget_list.append(self.search_terms_entry)
+
+        # Save button
+        save_button = tk.Button(self.frame, text="Save", command=self.save_settings)
+        self.widget_list.append(save_button)
+
     def reset_widgets(self):
         # Reset widget values to dictionary values
         self.num_articles_entry.delete(0, tk.END)
-        self.num_articles_entry.insert(0, str(self.settings["NumArticles"]))
+        self.num_articles_entry.insert(0, str(self["NumArticles"]))
 
-        self.run_report_var.set(self.s["RunReport"])
-        self.run_report_dropdown.set(self.s["RunReport"])
+        self.run_report_var.set(self["RunReport"])
+        self.run_report_dropdown.set(self["RunReport"])
 
         self.rscript_location_entry.delete(0, tk.END)
-        self.rscript_location_entry.insert(0, self.s["RScriptLocation"])
+        self.rscript_location_entry.insert(0, self["RScriptLocation"])
 
         self.search_terms_entry.delete("1.0", tk.END)
-        self.search_terms_entry.insert(tk.END, "\n".join(self.s["SearchTerms"]))
+        self.search_terms_entry.insert(tk.END, "\n".join(self["SearchTerms"]))
 
     def hide_widgets(self):
         for widget in self.widget_list:
@@ -59,7 +100,29 @@ class SettingsGUI:
         for widget in self.widget_list:
             widget.pack()
 
-    def validate_num_articles(self, new_value):
+    def browse_rscript_location(self):
+        # Open a file dialog to select RScriptLocation
+        file_path = filedialog.askopenfilename()
+        self.rscript_location_entry.delete(0, tk.END)
+        self.rscript_location_entry.insert(0, file_path)
+
+    def save_settings(self):
+        # Save settings based on user input
+        self["NumArticles"] = int(self.num_articles_entry.get())
+        self["RunReport"] = self.run_report_var.get()
+        self["RScriptLocation"] = self.rscript_location_entry.get()
+
+        SearchTerms = {}
+        for term in self.search_terms_entry.get("1.0", tk.END).splitlines():
+            term.split("|")
+            SearchTerms[term[0]] = term[1]
+        self["SearchTerms"] = SearchTerms
+
+        # Save settings to file
+        self.save()
+
+    @staticmethod
+    def validate_num_articles(new_value):
         # Validation callback to allow only numeric input for NumArticles
         try:
             if new_value == "":
@@ -69,64 +132,9 @@ class SettingsGUI:
         except ValueError:
             return False
 
-    def create_widgets(self):
-        # NumArticles
-        l1 = tk.Label(self.frame, text="NumArticles:")
-        self.widget_list.append(l1)
-        self.num_articles_entry = tk.Entry(self.frame)
-        self.num_articles_entry.insert(0, str(self.s["NumArticles"]))
-        self.num_articles_entry.config(validate="key", validatecommand=(self.frame.register(self.validate_num_articles), '%P'))
-        self.widget_list.append(self.num_articles_entry)
-
-        # RunReport
-        l2 = tk.Label(self.frame, text="RunReport:")
-        self.widget_list.append(l2)
-        self.run_report_var = tk.StringVar(self.frame)
-        self.run_report_var.set(self.s["RunReport"])
-        self.run_report_dropdown = ttk.Combobox(self.frame, values=["Daily", "Weekly", "Monthly", "Yearly"],
-                                                state="readonly")
-        self.run_report_dropdown.set(self.s["RunReport"])
-        self.widget_list.append(self.run_report_dropdown)
-
-        # RScriptLocation
-        l3 = tk.Label(self.frame, text="RScriptLocation:")
-        self.widget_list.append(l3)
-        self.rscript_location_entry = tk.Entry(self.frame)
-        self.rscript_location_entry.insert(0, self.s["RScriptLocation"])
-        self.widget_list.append(self.rscript_location_entry)
-        browse = tk.Button(self.frame, text="Browse", command=self.browse_rscript_location)
-        self.widget_list.append(browse)
-
-        # SearchTerms
-        l4 = tk.Label(self.frame, text="SearchTerms:")
-        self.widget_list.append(l4)
-        self.search_terms_entry = tk.Text(self.frame, height=8, width=40)  # Adjusted size
-        self.search_terms_entry.insert(tk.END, "\n".join(self.s["SearchTerms"]))
-        self.widget_list.append(self.search_terms_entry)
-
-        # Save button
-        save_button = tk.Button(self.frame, text="Save", command=self.save_settings)
-        self.widget_list.append(save_button)
-
-    def browse_rscript_location(self):
-        # Open a file dialog to select RScriptLocation
-        file_path = filedialog.askopenfilename()
-        self.rscript_location_entry.delete(0, tk.END)
-        self.rscript_location_entry.insert(0, file_path)
-
-    def save_settings(self):
-        # Save settings based on user input
-        self.s["NumArticles"] = int(self.num_articles_entry.get())
-        self.s["RunReport"] = self.run_report_var.get()
-        self.s["RScriptLocation"] = self.rscript_location_entry.get()
-        self.s["SearchTerms"] = [term.strip() for term in self.search_terms_entry.get("1.0", tk.END).splitlines()]
-
-        # Save settings to file
-        self.save()
-
 
 class Root:
-    def __init__(self, settings: Settings):
+    def __init__(self, filepath: str):
 
         # sets up the window
         self.root = tk.TK()
@@ -144,6 +152,8 @@ class Root:
         self.right_frame = ttk.Frame(self.root)
         self.right_frame.pack(side=tk.RIGHT, padx=10, pady=10, fill=tk.BOTH, expand=True)
 
+        self.settings = SettingsGUI(filepath, self.right_frame)
+
         buttons = [
             "Run",
             "Generate Sentiment Report",
@@ -157,10 +167,10 @@ class Root:
 
         for index, text in enumerate(buttons, start=1):
             button = ttk.Button(self.left_frame, text=text, padding=(10, 10),
-                                command=lambda i=index: self.on_item_click(i, settings))
+                                command=lambda i=index: self.on_item_click(i, self.settings))
             button.pack(fill=tk.X)
 
-    def on_item_click(self, index, settings: Settings):
+    def on_item_click(self, index, settings: SettingsGUI):
         settings.hide_widgets()
 
         for widget in self.right_frame.winfo_children():

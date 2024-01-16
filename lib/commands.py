@@ -2,36 +2,22 @@ import csv
 import subprocess
 from gnews import GNews
 from datetime import datetime, date
-import tkinter as tk
+
 from lib.settings import Settings
 
 
-class RedirectText:
-    def __init__(self, text_widget):
-        self.output = text_widget
-
-    def write(self, string):
-        self.output.insert(tk.END, string)
-        self.output.see(tk.END)
-        self.output.place(relx=0.5, rely=0.4, anchor=tk.N)
-
-    def writelines(self, lines):
-        for line in lines:
-            self.write(line)
-
-
-def generate_articles(settings: Settings, output: RedirectText):
-    output.write("Generating articles...\n")
+def generate_articles(settings: Settings):
+    print("Generating articles...\n")
 
     # Configuration
     news = GNews()
-    news.max_results = settings.s["NumArticles"]
+    news.max_results = settings["NumArticles"]
     
     # Searching and saving
     csv_data = []
-    for search in settings.s["SearchTerms"].keys():
+    for search in settings["SearchTerms"].keys():
 
-        output.write(f"\t\nGenerating news for {search}...\n")
+        print(f"\t\nGenerating news for {search}...\n")
         inews = news.get_news(search)
         row = [search]
     
@@ -48,11 +34,11 @@ def generate_articles(settings: Settings, output: RedirectText):
                 formatted_date = date_str
 
             row.extend([title, formatted_date])
-            output.write(f"{title} - {formatted_date}, ")
-        output.write('\n')
+            print(f"{title} - {formatted_date}, ")
+        print('\n')
 
         # Fill the remaining columns with empty strings if there are fewer than settings["NumArticles"] articles
-        row += ['', ''] * (settings.s["NumArticles"] - len(inews))
+        row += ['', ''] * (settings["NumArticles"] - len(inews))
     
         csv_data.append(row)
     
@@ -62,27 +48,27 @@ def generate_articles(settings: Settings, output: RedirectText):
         csv_header.extend([f"article {i + 1}", f"date {i + 1}"])
 
 
-    output.write(f"Saving articles to: './lib/csv_data/Top50_{str(date.today())}.csv'")
+    print(f"Saving articles to: './lib/csv_data/Top50_{str(date.today())}.csv'")
     with open(f"./lib/csv_data/Top50_{date.today()}.csv", "w", newline='', encoding='utf-8') as csvfile:
         csv_writer = csv.writer(csvfile)
         csv_writer.writerow(csv_header)
         csv_writer.writerows(csv_data)
 
-    output.write("Articles Generated!\n")
+    print("Articles Generated!\n")
 
 
-def generate_sentiment_report(settings: Settings, output: RedirectText):
+def generate_sentiment_report(settings: Settings):
 
     try:
-        generate_articles(settings, output)
+        generate_articles(settings)
 
-        output.write("\nGenerating Sentiment report...\n")
+        print("\nGenerating Sentiment report...\n")
 
         # the two paths to the R scripts
         r_script_path1 = './lib/RScripts/sentiment_analysis.R'
         r_script_path2 = './lib/RScripts/graph_sentiment.R'
 
-        output.write("\tRunning R Script 1...\n")
+        print("\tRunning R Script 1...\n")
 
         # Run the R script using subprocess
         process = subprocess.Popen([settings.s["RScriptLocation"], r_script_path1],
@@ -90,10 +76,10 @@ def generate_sentiment_report(settings: Settings, output: RedirectText):
 
         # wait for process to finish
         out, errors = process.communicate()
-        output.write(f"Output: {out}\n")
-        output.write(f"Errors: {errors}\n")
+        print(f"Output: {out}\n")
+        print(f"Errors: {errors}\n")
 
-        output.write("\tRunning R Script 2...\n")
+        print("\tRunning R Script 2...\n")
 
         # Run the R script using subprocess
         process = subprocess.Popen([settings.s["RScriptLocation"], r_script_path2],
@@ -101,10 +87,10 @@ def generate_sentiment_report(settings: Settings, output: RedirectText):
 
         # wait for process to finish
         out, errors = process.communicate()
-        output.write(f"Output: {out}\n")
-        output.write(f"Errors: {errors}\n")
+        print(f"Output: {out}\n")
+        print(f"Errors: {errors}\n")
 
-        output.write("R Scripts finished!\n")
+        print("R Scripts finished!\n")
 
     except Exception as e:
-        output.write(f"Error: {e}")
+        print(f"Error: {e}")
