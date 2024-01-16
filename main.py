@@ -1,11 +1,20 @@
 from lib.GUI import Root
 from lib.settings import Settings, SettingsException
+from lib.utils import generate_articles, generate_stock_report, generate_sentiment_report
 from sys import argv
 
 
 def main():
 
     largv = [str(arg).lower() for arg in argv]
+
+    # This launches the GUI version of the program
+    # SYNTAX: -gui
+    if '-gui' in largv:
+        root = Root('./lib/settings.json')
+        root.root.mainloop()
+        return  # no arguments after '-gui' are accepted
+
     settings_filename = "./lib/settings.json"
     for i, (arg, larg) in enumerate(zip(largv, argv)):
 
@@ -16,7 +25,7 @@ def main():
 
         # this is a CLI way to change your settings
         # SYNTAX: '-settingsmod SettingName=NewSetting'
-        if '-settingsmod' == larg[:12]:
+        elif '-settingsmod' == larg:
             try:
                 # first, loads and instance of the settings to modify
                 settings = Settings(settings_filename)
@@ -68,12 +77,18 @@ def main():
                 print("Invalid settings given for settingsmod. Ignoring and continuing")
                 continue
 
-        # This launches the GUI version of the program
-        # SYNTAX: -gui
-        if '-gui' == larg:
-            root = Root(settings_filename)
-            root.root.mainloop()
-            return  # no arguments after '-gui' are accepted
+        # these flags are the ones that add functionality to the CLI
+        elif '-news' == larg:
+            generate_articles(Settings(settings_filename))
+
+        elif '-sentiment' == larg:
+            generate_sentiment_report(Settings(settings_filename))
+
+        elif '-sentimentonly' == larg:
+            generate_sentiment_report(Settings(settings_filename), gen_articles=False)
+
+        elif '-stock' == larg:
+            generate_stock_report(Settings(settings_filename))
 
 
 if __name__ == "__main__":
