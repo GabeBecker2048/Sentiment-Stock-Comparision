@@ -73,10 +73,12 @@ def generate_articles(settings: Settings, outstream=None):
     print("Articles Generated!\n", file=outstream)
 
 
-def generate_sentiment_report(settings: Settings, outstream=None):
+def generate_sentiment_report(settings: Settings, outstream=None, gen_articles: bool = True):
 
     try:
-        generate_articles(settings, outstream)
+        # generates the articles before generating the sentiment report
+        if gen_articles:
+            generate_articles(settings, outstream)
 
         print("\nGenerating Sentiment report...\n", file=outstream)
 

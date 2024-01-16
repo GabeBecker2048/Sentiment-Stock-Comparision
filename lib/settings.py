@@ -8,7 +8,7 @@ class Settings:
             "NumArticles": 20,
             "RunReport": "Daily",
             "Running": False,
-            "RScriptLocation": "Rscript.exe",
+            "RScriptLocation": "Rscript",
             "SearchTerms": {
                 "Apple": "AAPL", "Microsoft": "MSFT", "Alphabet (Google)": "GOOGL", "Amazon": "AMZN", "NVIDIA": "NVDA",
                 "Meta Platforms (Facebook)": "META", "Berkshire Hathaway": "BRK.B", "Tesla": "TSLA", "Eli Lilly": "LLY",
