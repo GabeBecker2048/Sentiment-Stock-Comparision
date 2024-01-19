@@ -17,7 +17,7 @@ To run this project, you will need the following:
    
 4. **___ and ____ R modules**: These modules are used to analyze the data. You can install them using the following command:
     ```bash
-    RScript something something something
+    RScript install.packages(c(package1, package2, package3))
     ```
 
 You install all requirements at once by running `setup.sh` (or `setup.bat` if you are on Windows)
@@ -31,17 +31,18 @@ launch the GUI and ignore all CLI flags except for -settings
 
 ### Flags
 
+- -nogui : Runs the program in CLI mode
 - -settings=directory/to/your/settings.json : Changes the settings file that you are using
 - -settingsmod [settingname]=[newsetting] : Changes a setting
-- -sentiment : Generates the news and sentiment report
-- -stock : Generates the stock report
-- -news : Only generates the news report
-- -sentimentonly : Only generates the sentiment report. 
-Note: This will only work if the news report for the day has been generated.
+- -sentiment : Generates the news and sentiment report for the day
+- -stock : Generates the stock report for the day
+- -news : Only generates the news report, without running an analysis of it.
+- -sentimentonly : Only generates the sentiment report
+NOTE: This will only work if the news report for the day has been generated.
 
 ## Contributors
 - Gabe Becker, gabebecker2048@gmail.com, @GabeBecker2048
-- Wyatt Burch-Celentino, wyatt@wyatt.wyatt, @wyatthbc
+- Wyatt Burch-Celantino, wyatt@wyatt.wyatt, @wyatthbc
 - Sam Chapoton, sam@sam.sam, @samchapoton
 
 ## Copyright
