@@ -4,55 +4,155 @@
     "Running": false,
     "RScriptLocation": "C:/Program Files/R/R-4.3.2/bin/Rscript.exe",
     "SearchTerms": {
-        "AAPL": "Apple",
-        "MSFT": "Microsoft",
-        "GOOGL": "Alphabet (Google)",
-        "AMZN": "Amazon",
-        "NVDA": "NVIDIA",
-        "META": "Meta Platforms (Facebook)",
-        "BRK.B": "Berkshire Hathaway",
-        "TSLA": "Tesla",
-        "LLY": "Eli Lilly",
-        "V": "Visa",
-        "AVGO": "Broadcom",
-        "UNH": "UnitedHealth",
-        "JPM": "JPMorgan Chase",
-        "WMT": "Walmart",
-        "XOM": "Exxon Mobil",
-        "MA": "Mastercard",
-        "JNJ": "Johnson & Johnson",
-        "PG": "Procter & Gamble",
-        "ORCL": "Oracle",
-        "HD": "Home Depot",
-        "ADBE": "Adobe",
-        "CVX": "Chevron",
-        "COST": "Costco",
-        "MRK": "Merck",
-        "KO": "Coca-Cola",
-        "ABBV": "AbbVie",
-        "BAC": "Bank of America",
-        "PEP": "Pepsico",
-        "CRM": "Salesforce",
-        "NFLX": "Netflix",
-        "MCD": "McDonald",
-        "AMD": "AMD",
-        "CSCO": "Cisco",
-        "TMO": "Thermo Fisher Scientific",
-        "INTC": "Intel",
-        "ABT": "Abbott Laboratories",
-        "TMUS": "T-Mobile US",
-        "PFE": "Pfizer",
-        "CMCSA": "Comcast",
-        "DIS": "Walt Disney",
-        "NKE": "Nike",
-        "DHR": "Danaher",
-        "INTU": "Intuit",
-        "VZ": "Verizon",
-        "WFC": "Wells Fargo",
-        "PM": "Philip Morris",
-        "QCOM": "QUALCOMM",
-        "AMGN": "Amgen",
-        "IBM": "IBM",
-        "TXN": "Texas Instruments"
+        "AAPL": [
+            "Apple"
+        ],
+        "MSFT": [
+            "Microsoft"
+        ],
+        "GOOGL": [
+            "Alphabet (Google)"
+        ],
+        "AMZN": [
+            "Amazon"
+        ],
+        "NVDA": [
+            "NVIDIA"
+        ],
+        "META": [
+            "Meta Platforms (Facebook)"
+        ],
+        "BRK.B": [
+            "Berkshire Hathaway"
+        ],
+        "TSLA": [
+            "Tesla"
+        ],
+        "LLY": [
+            "Eli Lilly"
+        ],
+        "V": [
+            "Visa"
+        ],
+        "AVGO": [
+            "Broadcom"
+        ],
+        "UNH": [
+            "UnitedHealth"
+        ],
+        "JPM": [
+            "JPMorgan Chase"
+        ],
+        "WMT": [
+            "Walmart"
+        ],
+        "XOM": [
+            "Exxon Mobil"
+        ],
+        "MA": [
+            "Mastercard"
+        ],
+        "JNJ": [
+            "Johnson & Johnson"
+        ],
+        "PG": [
+            "Procter & Gamble"
+        ],
+        "ORCL": [
+            "Oracle"
+        ],
+        "HD": [
+            "Home Depot"
+        ],
+        "ADBE": [
+            "Adobe"
+        ],
+        "CVX": [
+            "Chevron"
+        ],
+        "COST": [
+            "Costco"
+        ],
+        "MRK": [
+            "Merck"
+        ],
+        "KO": [
+            "Coca-Cola"
+        ],
+        "ABBV": [
+            "AbbVie"
+        ],
+        "BAC": [
+            "Bank of America"
+        ],
+        "PEP": [
+            "Pepsico"
+        ],
+        "CRM": [
+            "Salesforce"
+        ],
+        "NFLX": [
+            "Netflix"
+        ],
+        "MCD": [
+            "McDonald"
+        ],
+        "AMD": [
+            "AMD"
+        ],
+        "CSCO": [
+            "Cisco"
+        ],
+        "TMO": [
+            "Thermo Fisher Scientific"
+        ],
+        "INTC": [
+            "Intel"
+        ],
+        "ABT": [
+            "Abbott Laboratories"
+        ],
+        "TMUS": [
+            "T-Mobile US"
+        ],
+        "PFE": [
+            "Pfizer"
+        ],
+        "CMCSA": [
+            "Comcast"
+        ],
+        "DIS": [
+            "Walt Disney"
+        ],
+        "NKE": [
+            "Nike"
+        ],
+        "DHR": [
+            "Danaher"
+        ],
+        "INTU": [
+            "Intuit"
+        ],
+        "VZ": [
+            "Verizon"
+        ],
+        "WFC": [
+            "Wells Fargo"
+        ],
+        "PM": [
+            "Philip Morris"
+        ],
+        "QCOM": [
+            "QUALCOMM"
+        ],
+        "AMGN": [
+            "Amgen"
+        ],
+        "IBM": [
+            "IBM"
+        ],
+        "TXN": [
+            "Texas Instruments"
+        ]
     }
 }
