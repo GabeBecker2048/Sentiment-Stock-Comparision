@@ -31,27 +31,28 @@ def generate_articles(settings: Settings, outstream=None):
     
     # Searching and saving
     csv_data = []
-    for search in settings["SearchTerms"].keys():
+    for searchlist in settings["SearchTerms"].values():
+        for search in searchlist:
 
-        print(f"\t\nGenerating news for {search}...\n", file=outstream)
-        inews = news.get_news(search)
-        row = [search]
-    
-        for article in inews:
-            title = article["title"].replace(',', '')
+            print(f"\t\nGenerating news for the search {search}...\n", file=outstream)
+            inews = news.get_news(search)
+            row = [search]
 
-            date_str = article["published date"].replace(',', '')
-    
-            # Format date to a more readable form
-            try:
-                date_obj = datetime.strptime(date_str, "%Y-%m-%dT%H:%M:%S.%fZ")
-                formatted_date = date_obj.strftime("%Y-%m-%d %H:%M:%S")
-            except ValueError:
-                formatted_date = date_str
+            for article in inews:
+                title = article["title"].replace(',', '')
 
-            row.extend([title, formatted_date])
-            print(f"{title} - {formatted_date}, ", file=outstream)
-        print('\n', file=outstream)
+                date_str = article["published date"].replace(',', '')
+
+                # Format date to a more readable form
+                try:
+                    date_obj = datetime.strptime(date_str, "%Y-%m-%dT%H:%M:%S.%fZ")
+                    formatted_date = date_obj.strftime("%Y-%m-%d %H:%M:%S")
+                except ValueError:
+                    formatted_date = date_str
+
+                row.extend([title, formatted_date])
+                print(f"{title} - {formatted_date}, ", file=outstream)
+            print('\n', file=outstream)
 
         # Fill the remaining columns with empty strings if there are fewer than settings["NumArticles"] articles
         row += ['', ''] * (settings["NumArticles"] - len(inews))
