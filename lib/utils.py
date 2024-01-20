@@ -112,7 +112,7 @@ def generate_stock_report(settings: Settings, outstream=None):
     differences = []
 
     # Iterate over stocks
-    for stock_name, stock_symbol in settings["SearchTerms"].items():
+    for stock_symbol, stock_name in settings["SearchTerms"].items():
         ticker = yf.Ticker(stock_symbol)
 
         # Get historical market data for the last 5 days
