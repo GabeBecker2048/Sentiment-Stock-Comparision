@@ -54,10 +54,10 @@ def generate_articles(settings: Settings, outstream=None):
                 print(f"{title} - {formatted_date}, ", file=outstream)
             print('\n', file=outstream)
 
-        # Fill the remaining columns with empty strings if there are fewer than settings["NumArticles"] articles
-        row += ['', ''] * (settings["NumArticles"] - len(inews))
-    
-        csv_data.append(row)
+            # Fill the remaining columns with empty strings if there are fewer than settings["NumArticles"] articles
+            row += ['', ''] * (settings["NumArticles"] - len(inews))
+
+            csv_data.append(row)
     
     # Writing to CSV file
     csv_header = ['Search Term']
