@@ -1,6 +1,6 @@
 import csv
 import subprocess
-from datetime import datetime, date, timedelta
+from datetime import datetime, timedelta
 from gnews import GNews
 import yfinance as yf
 
@@ -65,8 +65,8 @@ def generate_articles(settings: Settings, outstream=None):
         csv_header.extend([f"article {i + 1}", f"date {i + 1}"])
 
 
-    print(f"Saving articles to: './lib/csv_data/Top50_{str(date.today())}.csv'", file=outstream)
-    with open(f"./lib/csv_data/Top50_{date.today()}.csv", "w", newline='', encoding='utf-8') as csvfile:
+    print(f"Saving articles to: './lib/csv_data/news_data/Top50_{datetime.now().strftime('%Y-%m-%d_%H')}.csv'", file=outstream)
+    with open(f"./lib/csv_data/news_data/Top50_{datetime.now().strftime('%Y-%m-%d_%H')}.csv", "w", newline='', encoding='utf-8') as csvfile:
         csv_writer = csv.writer(csvfile)
         csv_writer.writerow(csv_header)
         csv_writer.writerows(csv_data)
@@ -142,10 +142,7 @@ def generate_stock_report(settings: Settings, outstream=None):
     print('CURRENT PRICES: ', current_prices, file=outstream)
     print('DIFFERENCES: ', differences, file=outstream)
 
-    # Format as a string
-    timestamp_str = today.strftime("%Y-%m-%d")
-    # Use in file name
-    file_name = f"./lib/csv_data/prices_{timestamp_str}.csv"
+    file_name = f"./lib/csv_data/stock_data/prices_{datetime.now().strftime('%Y-%m-%d_%H')}.csv"
 
     with open(file_name, "w", newline='') as f:
         w = csv.writer(f, delimiter=",", lineterminator='\r\n')
