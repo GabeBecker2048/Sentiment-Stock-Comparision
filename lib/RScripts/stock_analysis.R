@@ -8,7 +8,7 @@ sentiment_analysis_dataset<- read.csv(file_path)
 
 #Read the csv stock data
 file_path <- paste("./lib/csv_data/prices_",today_date, ".csv", sep = "")
-stock_dataset<-read.csv(file_path)
+stock_dataset<-read.csv(file_path, header = FALSE)
 stock_dataset_ordered<- stock_dataset[order(stock_dataset$V1),]
 
 coorelation_dataset<-data.frame(
@@ -20,8 +20,32 @@ coorelation_dataset<-data.frame(
   Sentiment_Score = c(sentiment_analysis_dataset$sentiment_score)
 )
 
-head(coorelation_dataset)
+coorelation_dataset_filtered<-coorelation_dataset%>%
+  filter(Percent_Change<1000000,Percent_Change>-10000000)
+cor.test(coorelation_dataset_filtered$Percent_Change,coorelation_dataset_filtered$Sentiment_Score)
 
-write.csv(coorelation_dataset, paste("./lib/csv_data/stock_analysis_", today_date, ".csv", sep = ""))
+correlation_test_result <- cor.test(
+  coorelation_dataset_filtered$Percent_Change,
+  coorelation_dataset_filtered$Sentiment_Score
+)
 
-#percent_change<-c(coorelation_dataset$X0.3300018310546875/coorelation_dataset$V2)
+output_data <- data.frame(
+  Estimate = correlation_test_result$estimate,
+  P_Value = correlation_test_result$p.value,
+  Method = correlation_test_result$method,
+  Conf_Interval_Lower = correlation_test_result$conf.int[1],
+  Conf_Interval_Upper = correlation_test_result$conf.int[2],
+  Date = date(),
+  Search_Terms = paste(coorelation_dataset_filtered$Company, collapse = ", ")
+)
+write.csv(output_data, file = paste("./lib/csv_data/coorelation_",today_date,".csv",sep = ""), row.names = FALSE)
+
+library(ggplot2)
+ggplot(coorelation_dataset_filtered, aes(x=Sentiment_Score, y=Percent_Change))+ geom_point()+geom_smooth(method=lm)+xlab("Sentiment Score")+ylab("Percent Daily Change")
+
+#ggsave(coorelation_dataset_filtered,paste("./lib/graphs/scatterplot_", today_date, ".png", sep = ""), width = 10, height = 4)
+
+
+
+
+
