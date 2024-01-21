@@ -40,7 +40,7 @@ class SettingsGUI(Settings):
         self.run_report_dropdown = ttk.Combobox(self.frame, values=["Daily", "Weekly", "Monthly", "Yearly"],
                                                 state="readonly")
         self.rscript_location_entry = tk.Entry(self.frame)
-        self.search_terms_entry = tk.Text(self.frame, height=8, width=40)
+        self.search_terms_entry = tk.Text(self.frame, height=15, width=80)
 
         # create the widgets
         self.create_widgets()
@@ -72,8 +72,17 @@ class SettingsGUI(Settings):
         l4 = tk.Label(self.frame, text="SearchTerms:")
         self.widget_list.append(l4)
 
-        search_entries = [stock_name + "," + stock_symbol for stock_name, stock_symbol in self["SearchTerms"].items()]
-        self.search_terms_entry.insert(tk.END, "\n".join(search_entries))
+        # sets up the search term string for viewing
+        search_entries = ""
+        for stock_symbol, search_terms in self["SearchTerms"].items():
+            stock_str = stock_symbol + ':'
+            for term in search_terms:
+                if stock_str != (stock_symbol + ':'):
+                    stock_str += ','
+                stock_str += term
+            search_entries += stock_str + "\n"
+        search_entries = search_entries[:-1]
+        self.search_terms_entry.insert(tk.END, search_entries)
 
         self.widget_list.append(self.search_terms_entry)
 
@@ -93,8 +102,17 @@ class SettingsGUI(Settings):
         self.rscript_location_entry.insert(0, self["RScriptLocation"])
 
         self.search_terms_entry.delete("1.0", tk.END)
-        search_entries = [stock_name + "," + stock_symbol for stock_name, stock_symbol in self["SearchTerms"].items()]
-        self.search_terms_entry.insert(tk.END, "\n".join(search_entries))
+        # sets up the search term string for viewing
+        search_entries = ""
+        for stock_symbol, search_terms in self["SearchTerms"].items():
+            stock_str = stock_symbol + ':'
+            for term in search_terms:
+                if stock_str != (stock_symbol + ':'):
+                    stock_str += ','
+                stock_str += term
+            search_entries += stock_str + "\n"
+        search_entries = search_entries[:-1]
+        self.search_terms_entry.insert(tk.END, search_entries)
 
     def hide_widgets(self):
         for widget in self.widget_list:
@@ -118,8 +136,9 @@ class SettingsGUI(Settings):
 
         SearchTerms = {}
         for term in self.search_terms_entry.get("1.0", tk.END).splitlines():
-            splitterm = term.split(",")
-            SearchTerms[splitterm[0]] = splitterm[1]
+            splitterm = term.split(":")
+            subterms = [subterm for subterm in splitterm[1].split(",")]
+            SearchTerms[splitterm[0]] = subterms
         self["SearchTerms"] = SearchTerms
 
         # Save settings to file
