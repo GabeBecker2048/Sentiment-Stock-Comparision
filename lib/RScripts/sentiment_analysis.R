@@ -8,7 +8,7 @@ library(tidyr)
 today_date <- format(Sys.Date(), "%Y-%m-%d")
 
 # Read the CSV file with today's date in the file path
-file_path <- paste("./lib/csv_data/Top50_", today_date, ".csv", sep = "")
+file_path <- paste("./lib/csv_data/news_data/Top50_", today_date, ".csv", sep = "")
 Top50 <- read.csv(file_path)
 
 # Extract article titles and dates
@@ -38,4 +38,4 @@ sentiment_analysis_top50 <- Top50_clean %>%
 # Convert 'Search.Term' to a factor with specific levels
 sentiment_analysis_top50$Search.Term <- factor(sentiment_analysis_top50$Search.Term, levels = unique(sentiment_analysis_top50$Search.Term))
 
-write.csv(sentiment_analysis_top50, paste("./lib/csv_data/sentiment_analysis_", today_date, ".csv", sep = ""))
+write.csv(sentiment_analysis_top50, paste("./lib/csv_data/sentiment_data/sentiment_analysis_", today_date, ".csv", sep = ""))

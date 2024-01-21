@@ -1,58 +1,208 @@
 {
-    "NumArticles": 20,
+    "NumArticles": 5,
     "RunReport": "Daily",
     "Running": false,
     "RScriptLocation": "Rscript",
     "SearchTerms": {
-        "Apple": "AAPL",
-        "Microsoft": "MSFT",
-        "Alphabet (Google)": "GOOGL",
-        "Amazon": "AMZN",
-        "NVIDIA": "NVDA",
-        "Meta Platforms (Facebook)": "META",
-        "Berkshire Hathaway": "BRK.B",
-        "Tesla": "TSLA",
-        "Eli Lilly": "LLY",
-        "Visa": "V",
-        "Broadcom": "AVGO",
-        "UnitedHealth": "UNH",
-        "JPMorgan Chase": "JPM",
-        "Walmart": "WMT",
-        "Exxon Mobil": "XOM",
-        "Mastercard": "MA",
-        "Johnson & Johnson": "JNJ",
-        "Procter & Gamble": "PG",
-        "Oracle": "ORCL",
-        "Home Depot": "HD",
-        "Adobe": "ADBE",
-        "Chevron": "CVX",
-        "Costco": "COST",
-        "Merck": "MRK",
-        "Coca-Cola": "KO",
-        "AbbVie": "ABBV",
-        "Bank of America": "BAC",
-        "Pepsico": "PEP",
-        "Salesforce": "CRM",
-        "Netflix": "NFLX",
-        "McDonald": "MCD",
-        "AMD": "AMD",
-        "Cisco": "CSCO",
-        "Thermo Fisher Scientific": "TMO",
-        "Intel": "INTC",
-        "Abbott Laboratories": "ABT",
-        "T-Mobile US": "TMUS",
-        "Pfizer": "PFE",
-        "Comcast": "CMCSA",
-        "Walt Disney": "DIS",
-        "Nike": "NKE",
-        "Danaher": "DHR",
-        "Intuit": "INTU",
-        "Verizon": "VZ",
-        "Wells Fargo": "WFC",
-        "Philip Morris": "PM",
-        "QUALCOMM": "QCOM",
-        "Amgen": "AMGN",
-        "IBM": "IBM",
-        "Texas Instruments": "TXN"
+        "AAPL": [
+            "Apple", 
+            "iPhone"
+        ],
+        "MSFT": [
+            "Microsoft",
+            "Azure"
+        ],
+        "GOOGL": [
+            "Alphabet (Google)",
+            "YouTube"
+        ],
+        "AMZN": [
+            "Amazon",
+            "AWS"
+        ],
+        "NVDA": [
+            "NVIDIA",
+            "GPU"
+        ],
+        "META": [
+            "Meta Platforms",
+            "Facebook"
+        ],
+        "BRK.B": [
+            "Berkshire Hathaway",
+            "Warren Buffet"
+        ],
+        "TSLA": [
+            "Tesla",
+            "Elon Musk"
+        ],
+        "LLY": [
+            "Eli Lilly",
+            "insulin"
+        ],
+        "V": [
+            "Visa",
+            "Credit"
+        ],
+        "AVGO": [
+            "Broadcom",
+            "semiconductor"
+        ],
+        "UNH": [
+            "UnitedHealth",
+            "health care"
+        ],
+        "JPM": [
+            "JPMorgan Chase",
+            "bank"
+        ],
+        "WMT": [
+            "Walmart",
+            "groceries"
+        ],
+        "XOM": [
+            "Exxon Mobil",
+            "oil"
+        ],
+        "MA": [
+            "Mastercard",
+            "credit"
+        ],
+        "JNJ": [
+            "Johnson & Johnson",
+            "pharmaceutical industry"
+        ],
+        "PG": [
+            "Procter & Gamble",
+            "personal care"
+        ],
+        "ORCL": [
+            "Oracle",
+            "Oracle Cloud"
+        ],
+        "HD": [
+            "Home Depot",
+            "hardware stores"
+        ],
+        "ADBE": [
+            "Adobe",
+            "Photoshop"
+        ],
+        "CVX": [
+            "Chevron",
+            "oil"
+        ],
+        "COST": [
+            "Costco",
+            "grocery stores"
+        ],
+        "MRK": [
+            "Merck",
+            "pharmaceutical industry"
+        ],
+        "KO": [
+            "Coca-Cola",
+            "soda"
+        ],
+        "ABBV": [
+            "AbbVie",
+            "pharmaceutical industry"
+        ],
+        "BAC": [
+            "Bank of America",
+            "banks"
+        ],
+        "PEP": [
+            "Pepsico", 
+            "Taco Bell"
+        ],
+        "CRM": [
+            "Salesforce",
+            "e-commerce"
+        ],
+        "NFLX": [
+            "Netflix",
+            "streaming"
+        ],
+        "MCD": [
+            "McDonalds",
+            "fast food"
+        ],
+        "AMD": [
+            "AMD",
+            "GPU"
+        ],
+        "CSCO": [
+            "Cisco",
+            "digital communications technology"
+        ],
+        "TMO": [
+            "Thermo Fisher Scientific",
+            "biotechnology"
+        ],
+        "INTC": [
+            "Intel",
+            "CPU"
+        ],
+        "ABT": [
+            "Abbott Laboratories",
+            "medical devices"
+        ],
+        "TMUS": [
+            "T-Mobile",
+            "mobile carriers"
+        ],
+        "PFE": [
+            "Pfizer",
+            "pharmaceutical industry"
+        ],
+        "CMCSA": [
+            "Comcast",
+            "internet service providers"
+        ],
+        "DIS": [
+            "Walt Disney",
+            "Disney+"
+        ],
+        "NKE": [
+            "Nike",
+            "shoes"
+        ],
+        "DHR": [
+            "Danaher",
+            "research and development"
+        ],
+        "INTU": [
+            "Intuit",
+            "tax software"
+        ],
+        "VZ": [
+            "Verizon",
+            "mobile carriers"
+        ],
+        "WFC": [
+            "Wells Fargo",
+            "banks"
+        ],
+        "PM": [
+            "Philip Morris",
+            "tabacco"
+        ],
+        "QCOM": [
+            "QUALCOMM",
+            "CPU"
+        ],
+        "AMGN": [
+            "Amgen",
+            "biotechnology"
+        ],
+        "IBM": [
+            "IBM",
+            "watson ai"
+        ],
+        "TXN": [
+            "Texas Instruments",
+            "semiconductor"
+        ]
     }
 }

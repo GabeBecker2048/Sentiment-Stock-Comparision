@@ -1,6 +1,6 @@
 import csv
 import subprocess
-from datetime import datetime, date, timedelta
+from datetime import datetime, timedelta
 from gnews import GNews
 import yfinance as yf
 
@@ -31,32 +31,33 @@ def generate_articles(settings: Settings, outstream=None):
     
     # Searching and saving
     csv_data = []
-    for search in settings["SearchTerms"].keys():
+    for searchlist in settings["SearchTerms"].values():
+        for search in searchlist:
 
-        print(f"\t\nGenerating news for {search}...\n", file=outstream)
-        inews = news.get_news(search)
-        row = [search]
-    
-        for article in inews:
-            title = article["title"].replace(',', '')
+            print(f"\t\nGenerating news for the search {search}...\n", file=outstream)
+            inews = news.get_news(search)
+            row = [search]
 
-            date_str = article["published date"].replace(',', '')
-    
-            # Format date to a more readable form
-            try:
-                date_obj = datetime.strptime(date_str, "%Y-%m-%dT%H:%M:%S.%fZ")
-                formatted_date = date_obj.strftime("%Y-%m-%d %H:%M:%S")
-            except ValueError:
-                formatted_date = date_str
+            for article in inews:
+                title = article["title"].replace(',', '')
 
-            row.extend([title, formatted_date])
-            print(f"{title} - {formatted_date}, ", file=outstream)
-        print('\n', file=outstream)
+                date_str = article["published date"].replace(',', '')
 
-        # Fill the remaining columns with empty strings if there are fewer than settings["NumArticles"] articles
-        row += ['', ''] * (settings["NumArticles"] - len(inews))
-    
-        csv_data.append(row)
+                # Format date to a more readable form
+                try:
+                    date_obj = datetime.strptime(date_str, "%Y-%m-%dT%H:%M:%S.%fZ")
+                    formatted_date = date_obj.strftime("%Y-%m-%d %H:%M:%S")
+                except ValueError:
+                    formatted_date = date_str
+
+                row.extend([title, formatted_date])
+                print(f"{title} - {formatted_date}, ", file=outstream)
+            print('\n', file=outstream)
+
+            # Fill the remaining columns with empty strings if there are fewer than settings["NumArticles"] articles
+            row += ['', ''] * (settings["NumArticles"] - len(inews))
+
+            csv_data.append(row)
     
     # Writing to CSV file
     csv_header = ['Search Term']
@@ -64,8 +65,8 @@ def generate_articles(settings: Settings, outstream=None):
         csv_header.extend([f"article {i + 1}", f"date {i + 1}"])
 
 
-    print(f"Saving articles to: './lib/csv_data/Top50_{str(date.today())}.csv'", file=outstream)
-    with open(f"./lib/csv_data/Top50_{date.today()}.csv", "w", newline='', encoding='utf-8') as csvfile:
+    print(f"Saving articles to: './lib/csv_data/news_data/Top50_{datetime.now().strftime('%Y-%m-%d_%H')}.csv'", file=outstream)
+    with open(f"./lib/csv_data/news_data/Top50_{datetime.now().strftime('%Y-%m-%d_%H')}.csv", "w", newline='', encoding='utf-8') as csvfile:
         csv_writer = csv.writer(csvfile)
         csv_writer.writerow(csv_header)
         csv_writer.writerows(csv_data)
@@ -112,7 +113,7 @@ def generate_stock_report(settings: Settings, outstream=None):
     differences = []
 
     # Iterate over stocks
-    for stock_name, stock_symbol in settings["SearchTerms"].items():
+    for stock_symbol, stock_name in settings["SearchTerms"].items():
         ticker = yf.Ticker(stock_symbol)
 
         # Get historical market data for the last 5 days
@@ -141,10 +142,7 @@ def generate_stock_report(settings: Settings, outstream=None):
     print('CURRENT PRICES: ', current_prices, file=outstream)
     print('DIFFERENCES: ', differences, file=outstream)
 
-    # Format as a string
-    timestamp_str = today.strftime("%Y-%m-%d")
-    # Use in file name
-    file_name = f"./lib/csv_data/prices_{timestamp_str}.csv"
+    file_name = f"./lib/csv_data/stock_data/prices_{datetime.now().strftime('%Y-%m-%d_%H')}.csv"
 
     with open(file_name, "w", newline='') as f:
         w = csv.writer(f, delimiter=",", lineterminator='\r\n')
