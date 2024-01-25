@@ -42,7 +42,7 @@ NOTE: This will only work if the news report for the day has been generated.
 
 ## Contributors
 - Gabe Becker, gabebecker2048@gmail.com, @GabeBecker2048
-- Wyatt Burch-Celantino, wyatt@wyatt.wyatt, @wyatthbc
+- Wyatt Burch-Celentano, wyatt@wyatt.wyatt, @wyatthbc
 - Sam Chapoton, sam@sam.sam, @samchapoton
 
 ## Copyright
