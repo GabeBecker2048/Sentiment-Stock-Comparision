@@ -88,8 +88,7 @@ def generate_sentiment_report(settings: Settings, outstream=None, gen_articles: 
     try:
         # generates the articles before generating the sentiment report
         if gen_articles:
-            pass
-            #generate_articles(settings, outstream)
+            generate_articles(settings, outstream)
 
         print("\nGenerating Sentiment report...\n", file=outstream)
 
