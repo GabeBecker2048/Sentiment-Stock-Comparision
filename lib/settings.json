@@ -1,208 +1,158 @@
 {
-    "NumArticles": 5,
+    "NumArticles": 20,
     "RunReport": "Daily",
     "Running": false,
-    "RScriptLocation": "Rscript",
+    "RScriptLocation": "RScript",
     "SearchTerms": {
         "AAPL": [
-            "Apple", 
-            "iPhone"
+            "Apple"
         ],
         "MSFT": [
-            "Microsoft",
-            "Azure"
+            "Microsoft"
         ],
         "GOOGL": [
-            "Alphabet (Google)",
-            "YouTube"
+            "Alphabet (Google)"
         ],
         "AMZN": [
-            "Amazon",
-            "AWS"
+            "Amazon"
         ],
         "NVDA": [
-            "NVIDIA",
-            "GPU"
+            "NVIDIA"
         ],
         "META": [
-            "Meta Platforms",
-            "Facebook"
+            "Meta Platforms"
         ],
         "BRK.B": [
-            "Berkshire Hathaway",
-            "Warren Buffet"
+            "Berkshire Hathaway"
         ],
         "TSLA": [
-            "Tesla",
-            "Elon Musk"
+            "Tesla"
         ],
         "LLY": [
-            "Eli Lilly",
-            "insulin"
+            "Eli Lilly"
         ],
         "V": [
-            "Visa",
-            "Credit"
+            "Visa"
         ],
         "AVGO": [
-            "Broadcom",
-            "semiconductor"
+            "Broadcom"
         ],
         "UNH": [
-            "UnitedHealth",
-            "health care"
+            "UnitedHealth"
         ],
         "JPM": [
-            "JPMorgan Chase",
-            "bank"
+            "JPMorgan Chase"
         ],
         "WMT": [
-            "Walmart",
-            "groceries"
+            "Walmart"
         ],
         "XOM": [
-            "Exxon Mobil",
-            "oil"
+            "Exxon Mobil"
         ],
         "MA": [
-            "Mastercard",
-            "credit"
+            "Mastercard"
         ],
         "JNJ": [
-            "Johnson & Johnson",
-            "pharmaceutical industry"
+            "Johnson & Johnson"
         ],
         "PG": [
-            "Procter & Gamble",
-            "personal care"
+            "Procter & Gamble"
         ],
         "ORCL": [
-            "Oracle",
-            "Oracle Cloud"
+            "Oracle"
         ],
         "HD": [
-            "Home Depot",
-            "hardware stores"
+            "Home Depot"
         ],
         "ADBE": [
-            "Adobe",
-            "Photoshop"
+            "Adobe"
         ],
         "CVX": [
-            "Chevron",
-            "oil"
+            "Chevron"
         ],
         "COST": [
-            "Costco",
-            "grocery stores"
+            "Costco"
         ],
         "MRK": [
-            "Merck",
-            "pharmaceutical industry"
+            "Merck"
         ],
         "KO": [
-            "Coca-Cola",
-            "soda"
+            "Coca-Cola"
         ],
         "ABBV": [
-            "AbbVie",
-            "pharmaceutical industry"
+            "AbbVie"
         ],
         "BAC": [
-            "Bank of America",
-            "banks"
+            "Bank of America"
         ],
         "PEP": [
-            "Pepsico", 
-            "Taco Bell"
+            "Pepsico"
         ],
         "CRM": [
-            "Salesforce",
-            "e-commerce"
+            "Salesforce"
         ],
         "NFLX": [
-            "Netflix",
-            "streaming"
+            "Netflix"
         ],
         "MCD": [
-            "McDonalds",
-            "fast food"
+            "McDonalds"
         ],
         "AMD": [
-            "AMD",
-            "GPU"
+            "AMD"
         ],
         "CSCO": [
-            "Cisco",
-            "digital communications technology"
+            "Cisco"
         ],
         "TMO": [
-            "Thermo Fisher Scientific",
-            "biotechnology"
+            "Thermo Fisher Scientific"
         ],
         "INTC": [
-            "Intel",
-            "CPU"
+            "Intel"
         ],
         "ABT": [
-            "Abbott Laboratories",
-            "medical devices"
+            "Abbott Laboratories"
         ],
         "TMUS": [
-            "T-Mobile",
-            "mobile carriers"
+            "T-Mobile"
         ],
         "PFE": [
-            "Pfizer",
-            "pharmaceutical industry"
+            "Pfizer"
         ],
         "CMCSA": [
-            "Comcast",
-            "internet service providers"
+            "Comcast"
         ],
         "DIS": [
-            "Walt Disney",
-            "Disney+"
+            "Walt Disney"
         ],
         "NKE": [
-            "Nike",
-            "shoes"
+            "Nike"
         ],
         "DHR": [
-            "Danaher",
-            "research and development"
+            "Danaher"
         ],
         "INTU": [
-            "Intuit",
-            "tax software"
+            "Intuit"
         ],
         "VZ": [
-            "Verizon",
-            "mobile carriers"
+            "Verizon"
         ],
         "WFC": [
-            "Wells Fargo",
-            "banks"
+            "Wells Fargo"
         ],
         "PM": [
-            "Philip Morris",
-            "tabacco"
+            "Philip Morris"
         ],
         "QCOM": [
-            "QUALCOMM",
-            "CPU"
+            "QUALCOMM"
         ],
         "AMGN": [
-            "Amgen",
-            "biotechnology"
+            "Amgen"
         ],
         "IBM": [
-            "IBM",
-            "watson ai"
+            "IBM"
         ],
         "TXN": [
-            "Texas Instruments",
-            "semiconductor"
+            "Texas Instruments"
         ]
     }
 }

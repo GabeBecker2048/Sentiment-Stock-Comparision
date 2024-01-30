@@ -7,6 +7,7 @@ import yfinance as yf
 from lib.settings import Settings
 
 
+# This function runs an R Script in Python
 def run_R_Script(r_script_path: str, RScriptLocation: str = "Rscript", outstream=None):
     print(f"\tRunning {r_script_path}...\n", file=outstream)
 
@@ -64,9 +65,9 @@ def generate_articles(settings: Settings, outstream=None):
     for i in range(settings["NumArticles"]):
         csv_header.extend([f"article {i + 1}", f"date {i + 1}"])
 
-
-    print(f"Saving articles to: './lib/csv_data/news_data/Top50_{datetime.now().strftime('%Y-%m-%d_%H')}.csv'", file=outstream)
-    with open(f"./lib/csv_data/news_data/Top50_{datetime.now().strftime('%Y-%m-%d_%H')}.csv", "w", newline='', encoding='utf-8') as csvfile:
+    newsfile = f"./lib/csv_data/news_data/news_{datetime.now().strftime('%Y-%m-%d')}.csv"
+    print(f"Saving articles to: {newsfile}", file=outstream)
+    with open(newsfile, "w", newline='', encoding='utf-8') as csvfile:
         csv_writer = csv.writer(csvfile)
         csv_writer.writerow(csv_header)
         csv_writer.writerows(csv_data)
@@ -142,7 +143,7 @@ def generate_stock_report(settings: Settings, outstream=None):
     print('CURRENT PRICES: ', current_prices, file=outstream)
     print('DIFFERENCES: ', differences, file=outstream)
 
-    file_name = f"./lib/csv_data/stock_data/prices_{datetime.now().strftime('%Y-%m-%d_%H')}.csv"
+    file_name = f"./lib/csv_data/stock_data/prices_{datetime.now().strftime('%Y-%m-%d')}.csv"
 
     with open(file_name, "w", newline='') as f:
         w = csv.writer(f, delimiter=",", lineterminator='\r\n')
@@ -154,7 +155,6 @@ def generate_stock_report(settings: Settings, outstream=None):
     print(f"Creating stock analysis...", file=outstream)
     rscript_path = "./lib/RScripts/stock_analysis.R"
     run_R_Script(rscript_path, settings["RScriptLocation"], outstream)
-    print("R scripts finished!", file=outstream)
 
     print("Finished stock report!", file=outstream)
 
