@@ -29,15 +29,19 @@ def generate_articles(settings: Settings, outstream=None):
     # Configuration
     news = GNews()
     news.max_results = settings["NumArticles"]
+
+    # before iterating through the search terms, we must first see what the maximum number of articles is:
+    max_terms = max(len(searchlist) for searchlist in settings["SearchTerms"].values())
+    max_articles = max_terms * settings["NumArticles"]
     
     # Searching and saving
     csv_data = []
     for searchlist in settings["SearchTerms"].values():
+        row = [searchlist[0]]
         for search in searchlist:
 
             print(f"\t\nGenerating news for the search {search}...\n", file=outstream)
             inews = news.get_news(search)
-            row = [search]
 
             for article in inews:
                 title = article["title"].replace(',', '')
@@ -51,19 +55,19 @@ def generate_articles(settings: Settings, outstream=None):
                 except ValueError:
                     formatted_date = date_str
 
-                row.extend([title, formatted_date])
+                row += [title, formatted_date]
                 print(f"{title} - {formatted_date}, ", file=outstream)
             print('\n', file=outstream)
 
-            # Fill the remaining columns with empty strings if there are fewer than settings["NumArticles"] articles
-            row += ['', ''] * (settings["NumArticles"] - len(inews))
+        # Fill the remaining columns with empty strings if there are fewer than max_articles articles
+        row += [' '] * (1 + (max_articles * 2) - len(row))
 
-            csv_data.append(row)
+        csv_data.append(row)
     
     # Writing to CSV file
     csv_header = ['Search Term']
-    for i in range(settings["NumArticles"]):
-        csv_header.extend([f"article {i + 1}", f"date {i + 1}"])
+    for i in range(max_articles):
+        csv_header += [f"article {i + 1}", f"date {i + 1}"]
 
     newsfile = f"./lib/csv_data/news_data/news_{datetime.now().strftime('%Y-%m-%d')}.csv"
     print(f"Saving articles to: {newsfile}", file=outstream)
