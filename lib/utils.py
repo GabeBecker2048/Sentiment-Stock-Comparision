@@ -46,6 +46,10 @@ def generate_articles(settings: Settings, outstream=None):
             for article in inews:
                 title = article["title"].replace(',', '')
 
+                # if the article is already in the row, we continue to the next article
+                if title in row:
+                    continue
+
                 date_str = article["published date"].replace(',', '')
 
                 # Format date to a more readable form
@@ -84,7 +88,8 @@ def generate_sentiment_report(settings: Settings, outstream=None, gen_articles: 
     try:
         # generates the articles before generating the sentiment report
         if gen_articles:
-            generate_articles(settings, outstream)
+            pass
+            #generate_articles(settings, outstream)
 
         print("\nGenerating Sentiment report...\n", file=outstream)
 
@@ -126,7 +131,7 @@ def generate_stock_report(settings: Settings, outstream=None):
 
         # Check if there are enough data points
         if len(hist) < 2:
-            print(f"Not enough data for {stock_name}", file=outstream)
+            print(f"Not enough data for {stock_name[0]}", file=outstream)
             # Append zeros to lists
             previous_prices.append("NaN")
             current_prices.append("NaN")
