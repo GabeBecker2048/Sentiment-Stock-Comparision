@@ -15,9 +15,9 @@ To run this project, you will need the following:
     pip install gnewsclient yfinance
     ```
    
-4. **___ and ____ R modules**: These modules are used to analyze the data. You can install them using the following command:
+4. **dplyr, tidytext, ggplot2, and tidyr R modules**: These modules are used to analyze the data. You can install them by first launching R then running the following command:
     ```bash
-    RScript install.packages(c(package1, package2, package3))
+    install.packages(c("dplyr", "tidytext", "ggplot2", "tidyr"))
     ```
 
 You install all requirements at once by running `setup.sh` (or `setup.bat` if you are on Windows)
