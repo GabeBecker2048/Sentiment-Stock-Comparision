@@ -12,7 +12,7 @@ To run this project, you will need the following:
 
 3. **GNews and YFinance Python modules**: These modules are used to fetch the data. You can install them using pip:
     ```bash
-    pip install gnewsclient yfinance
+    pip install gnews yfinance
     ```
    
 4. **dplyr, tidytext, ggplot2, and tidyr R modules**: These modules are used to analyze the data. You can install them by first launching R then running the following command:
