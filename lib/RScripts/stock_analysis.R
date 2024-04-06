@@ -4,11 +4,11 @@ library(ggplot2)
 today_date <- format(Sys.Date(), "%Y-%m-%d")
 
 # Read the CSV file with today's date in the file path
-file_path <- paste("../csv_data/sentiment_data/sentiment_",today_date, ".csv", sep = "")
+file_path <- paste("./lib/csv_data/sentiment_data/sentiment_",today_date, ".csv", sep = "")
 sentiment_analysis_dataset<- read.csv(file_path)
 
 #Read the csv stock data
-file_path <- paste("../csv_data/stock_data/prices_",today_date, ".csv", sep = "")
+file_path <- paste("./lib/csv_data/stock_data/prices_",today_date, ".csv", sep = "")
 stock_dataset<-read.csv(file_path)
 
 stock_dataset_ordered<- stock_dataset[order(stock_dataset$Ticker),]
@@ -40,7 +40,7 @@ output_data <- data.frame(
   Date = date(),
   Search_Terms = paste(coorelation_dataset_filtered$Company, collapse = ", ")
 )
-write.csv(output_data, file = paste("./lib/csv_data/coorelation_",today_date,".csv",sep = ""), row.names = FALSE)
+write.csv(output_data, file = paste("./lib/csv_data/coorelation_data/coorelation_",today_date,".csv",sep = ""), row.names = FALSE)
 
 ggplot(coorelation_dataset_filtered, aes(x=Sentiment_Score, y=Percent_Change))+ geom_point()+geom_smooth(method=lm)+xlab("Sentiment Score")+ylab("Percent Daily Change")
 

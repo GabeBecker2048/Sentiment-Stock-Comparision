@@ -155,6 +155,7 @@ def generate_stock_report(settings: Settings, outstream=None):
 
     with open(file_name, "w", newline='') as f:
         w = csv.writer(f, delimiter=",", lineterminator='\r\n')
+        w.writerow(("Ticker", "Open", "Close", "Difference"))
         for values in zip(settings["SearchTerms"], previous_prices, current_prices, differences):
             w.writerow(values)
 
