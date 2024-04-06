@@ -44,6 +44,4 @@ write.csv(output_data, file = paste("./lib/csv_data/coorelation_data/coorelation
 
 ggplot(coorelation_dataset_filtered, aes(x=Sentiment_Score, y=Percent_Change))+ geom_point()+geom_smooth(method=lm)+xlab("Sentiment Score")+ylab("Percent Daily Change")
 
-#ggsave(coorelation_dataset_filtered,paste("./lib/graphs/scatterplot_", today_date, ".png", sep = ""), width = 10, height = 4)
-
-
+ggsave(paste("./lib/graphs/scatterplot_", today_date, ".png", sep = ""), width = 10, height = 4)
