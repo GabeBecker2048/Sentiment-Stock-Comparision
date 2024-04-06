@@ -4,21 +4,21 @@ library(ggplot2)
 today_date <- format(Sys.Date(), "%Y-%m-%d")
 
 # Read the CSV file with today's date in the file path
-file_path <- paste("./lib/csv_data/sentiment_data/sentiment_",today_date, ".csv", sep = "")
+file_path <- paste("../csv_data/sentiment_data/sentiment_",today_date, ".csv", sep = "")
 sentiment_analysis_dataset<- read.csv(file_path)
 
 #Read the csv stock data
-file_path <- paste("./lib/csv_data/stock_data/prices_",today_date, ".csv", sep = "")
+file_path <- paste("../csv_data/stock_data/prices_",today_date, ".csv", sep = "")
 stock_dataset<-read.csv(file_path)
 
-stock_dataset_ordered<- stock_dataset[order(stock_dataset$V1),]
+stock_dataset_ordered<- stock_dataset[order(stock_dataset$Ticker),]
 
 coorelation_dataset<-data.frame(
-  Company = c(stock_dataset_ordered$V1),
-  Old_Price = c(stock_dataset_ordered$V2),
-  New_Price = c(stock_dataset_ordered$V3),
-  Price_Change = c(stock_dataset_ordered$V4),
-  Percent_Change =c(stock_dataset$V4/stock_dataset_ordered$V2),
+  Company = c(stock_dataset_ordered$Ticker),
+  Old_Price = c(stock_dataset_ordered$Open),
+  New_Price = c(stock_dataset_ordered$Close),
+  Price_Change = c(stock_dataset_ordered$Difference),
+  Percent_Change =c(stock_dataset$Difference/stock_dataset_ordered$Open),
   Sentiment_Score = c(sentiment_analysis_dataset$sentiment_score)
 )
 
