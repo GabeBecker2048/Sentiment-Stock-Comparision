@@ -167,3 +167,7 @@ def generate_stock_report(settings: Settings, outstream=None):
 
     print("Finished stock report!", file=outstream)
 
+
+def run_all(settings: Settings, outstream=None):
+    generate_sentiment_report(settings, outstream)
+    generate_stock_report(settings, outstream)

@@ -22,7 +22,6 @@ class Terminal:
     def write(self, string):
         self.output.insert(tk.END, string)
         self.output.see(tk.END)
-        self.output.place(relx=0.5, rely=0.4, anchor=tk.N)
 
     def writelines(self, lines):
         for line in lines:
@@ -114,10 +113,6 @@ class SettingsGUI(Settings):
         search_entries = search_entries[:-1]
         self.search_terms_entry.insert(tk.END, search_entries)
 
-    def hide_widgets(self):
-        for widget in self.widget_list:
-            widget.forget()
-
     def show_widgets(self):
         for widget in self.widget_list:
             widget.pack()
@@ -194,13 +189,19 @@ class Root:
             button.pack(fill=tk.X)
 
     def on_item_click(self, index, settings: SettingsGUI):
-        settings.hide_widgets()
 
         for widget in self.right_frame.winfo_children():
+            widget.pack_forget()
             widget.place_forget()
 
         if index == 1:
-            run_button = ttk.Button(self.right_frame, padding=(10, 10), text="Run", command="")
+            run_button = ttk.Button(self.right_frame,
+                                    padding=(10, 10),
+                                    text="Run",
+                                    command=lambda: threading.Thread(
+                                                target=run_all,
+                                                args=[settings, self.terminals[0]]).start()
+                                    )
             run_button.place(relx=0.5, rely=0.25, anchor=tk.CENTER)
             self.terminals[0].output.place(relx=0.5, rely=0.4, anchor=tk.N)
 
