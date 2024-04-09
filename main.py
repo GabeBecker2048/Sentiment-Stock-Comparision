@@ -1,6 +1,6 @@
 from lib.GUI import Root
 from lib.settings import Settings
-from lib.utils import generate_articles, generate_stock_report, generate_sentiment_report
+from lib.utils import *
 from sys import argv
 
 
@@ -39,6 +39,9 @@ def main():
                 print(f"The settings at '{settings_filename}' have been adjusted! {argv[i+1]}")
 
         # these flags are the ones that add functionality to the CLI
+        elif '-run' == larg:
+            run_all(CLI_Settings)
+
         elif '-news' == larg:
             generate_articles(CLI_Settings)
 
