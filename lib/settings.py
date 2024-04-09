@@ -4,26 +4,11 @@ import json
 class Settings:
     def __init__(self, filepath: str):
         self.filepath = filepath
-        self.s = {
-            "NumArticles": 20,
-            "RunReport": "Daily",
-            "Running": False,
-            "RScriptLocation": "Rscript",
-            "SearchTerms": {
-                "Apple": "AAPL", "Microsoft": "MSFT", "Alphabet (Google)": "GOOGL", "Amazon": "AMZN", "NVIDIA": "NVDA",
-                "Meta Platforms (Facebook)": "META", "Berkshire Hathaway": "BRK.B", "Tesla": "TSLA", "Eli Lilly": "LLY",
-                "Visa": "V", "Broadcom": "AVGO", "UnitedHealth": "UNH", "JPMorgan Chase": "JPM", "Walmart": "WMT",
-                "Exxon Mobil": "XOM", "Mastercard": "MA", "Johnson & Johnson": "JNJ", "Procter & Gamble": "PG",
-                "Oracle": "ORCL", "Home Depot": "HD", "Adobe": "ADBE", "Chevron": "CVX", "Costco": "COST",
-                "Merck": "MRK", "Coca-Cola": "KO", "AbbVie": "ABBV", "Bank of America": "BAC", "Pepsico": "PEP",
-                "Salesforce": "CRM", "Netflix": "NFLX", "McDonald": "MCD", "AMD": "AMD", "Cisco": "CSCO",
-                "Thermo Fisher Scientific": "TMO", "Intel": "INTC", "Abbott Laboratories": "ABT", "T-Mobile US": "TMUS",
-                "Pfizer": "PFE", "Comcast": "CMCSA", "Walt Disney": "DIS", "Nike": "NKE", "Danaher": "DHR",
-                "Intuit": "INTU", "Verizon": "VZ", "Wells Fargo": "WFC", "Philip Morris": "PM", "QUALCOMM": "QCOM",
-                "Amgen": "AMGN", "IBM": "IBM", "Texas Instruments": "TXN"
-            }
-        }
+        self.s = dict()
         self.load()
+        if self.s == {}:
+            print("Error: invalid or corrupted settings files detected. Please fix immediately...\nTerminating")
+            exit()
 
     def __getitem__(self, item: str):
         return self.s[item]
