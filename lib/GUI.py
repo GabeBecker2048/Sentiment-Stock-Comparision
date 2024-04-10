@@ -156,6 +156,7 @@ class Root:
 
         # sets up the window
         self.root = tk.Tk()
+        self.root.title("Sentiment Stock Comparison")
         self.root.geometry("1000x500")
 
         temp_frame = ttk.Frame(self.root)
