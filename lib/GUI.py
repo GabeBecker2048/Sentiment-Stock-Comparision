@@ -13,8 +13,6 @@ class Terminal:
         self.output = ScrolledText(
             right_frame,
             wrap=tk.WORD,
-            width=80,
-            height=15,
             bg='black',  # Set background color to black
             fg='white'  # Set text color to white
         )
@@ -40,6 +38,7 @@ class SettingsGUI(Settings):
                                                 state="readonly")
         self.rscript_location_entry = tk.Entry(self.frame)
         self.search_terms_entry = tk.Text(self.frame, height=15, width=80)
+        self.save_button = tk.Button(self.frame, text="Save", command=self.save_settings)
 
         # create the widgets
         self.create_widgets()
@@ -83,12 +82,6 @@ class SettingsGUI(Settings):
         search_entries = search_entries[:-1]
         self.search_terms_entry.insert(tk.END, search_entries)
 
-        self.widget_list.append(self.search_terms_entry)
-
-        # Save button
-        save_button = tk.Button(self.frame, text="Save", command=self.save_settings)
-        self.widget_list.append(save_button)
-
     def reset_widgets(self):
         # Reset widget values to dictionary values
         self.num_articles_entry.delete(0, tk.END)
@@ -116,6 +109,8 @@ class SettingsGUI(Settings):
     def show_widgets(self):
         for widget in self.widget_list:
             widget.pack()
+        self.search_terms_entry.pack(fill=tk.BOTH, expand=True)
+        self.save_button.pack()
 
     def browse_rscript_location(self):
         # Open a file dialog to select RScriptLocation
@@ -173,7 +168,31 @@ class Root:
 
         self.settings = SettingsGUI(filepath, self.right_frame)
 
-        buttons = [
+        self.buttons = [ttk.Button(self.right_frame,
+                                   padding=(10, 10),
+                                   text="Run",
+                                   command=lambda: threading.Thread(
+                                       target=run_all,
+                                       args=[self.settings, self.terminals[0]]).start()
+                                   ),
+                        ttk.Button(self.right_frame,
+                                   padding=(10, 10),
+                                   text="Generate Sentiment Report",
+                                   command=lambda: threading.Thread(
+                                       target=generate_sentiment_report,
+                                       args=[self.settings, self.terminals[1]]).start()
+                                   ),
+                        ttk.Button(self.right_frame,
+                                   padding=(10, 10),
+                                   text="Generate Stock Report",
+                                   command=lambda: threading.Thread(
+                                       target=generate_stock_report,
+                                       args=[self.settings, self.terminals[2]]).start()
+                                   )
+                        ]
+        self.terminals = [Terminal(self.right_frame) for i in range(3)]
+
+        button_strs = [
             "Run",
             "Generate Sentiment Report",
             "Generate Stock Report",
@@ -182,52 +201,29 @@ class Root:
             "Settings",
         ]
 
-        self.terminals = [Terminal(self.right_frame) for i in range(3)]
-
-        for index, text in enumerate(buttons, start=1):
+        for index, text in enumerate(button_strs, start=1):
             button = ttk.Button(self.left_frame, text=text, padding=(10, 10),
-                                command=lambda i=index: self.on_item_click(i, self.settings))
+                                command=lambda i=index: self.on_item_click(i))
             button.pack(fill=tk.X)
 
-    def on_item_click(self, index, settings: SettingsGUI):
+    def on_item_click(self, index):
 
         for widget in self.right_frame.winfo_children():
             widget.pack_forget()
             widget.place_forget()
 
         if index == 1:
-            run_button = ttk.Button(self.right_frame,
-                                    padding=(10, 10),
-                                    text="Run",
-                                    command=lambda: threading.Thread(
-                                                target=run_all,
-                                                args=[settings, self.terminals[0]]).start()
-                                    )
-            run_button.place(relx=0.5, rely=0.25, anchor=tk.CENTER)
-            self.terminals[0].output.place(relx=0.5, rely=0.4, anchor=tk.N)
+            self.buttons[0].place(relwidth=0.33, relheight=0.15, relx=0.5, rely=0.25, anchor=tk.CENTER)
+            self.terminals[0].output.place(relwidth=0.9, relheight=0.55, relx=0.5, rely=0.4, anchor=tk.N)
 
         elif index == 2:
-            gen_sent_report_button = ttk.Button(self.right_frame,
-                                                padding=(10, 10),
-                                                text="Generate Sentiment Report",
-                                                command=lambda: threading.Thread(
-                                                    target=generate_sentiment_report,
-                                                    args=[settings, self.terminals[1]]).start()
-                                                )
-            gen_sent_report_button.place(relx=0.5, rely=0.25, anchor=tk.CENTER)
-            self.terminals[1].output.place(relx=0.5, rely=0.4, anchor=tk.N)
+            self.buttons[1].place(relwidth=0.33, relheight=0.15, relx=0.5, rely=0.25, anchor=tk.CENTER)
+            self.terminals[1].output.place(relwidth=0.9, relheight=0.55, relx=0.5, rely=0.4, anchor=tk.N)
 
         elif index == 3:
-            gen_stock_report_button = ttk.Button(self.right_frame,
-                                                 padding=(10, 10),
-                                                 text="Generate Stock Report",
-                                                 command=lambda: threading.Thread(
-                                                    target=generate_stock_report,
-                                                    args=[settings, self.terminals[2]]).start()
-                                                 )
-            gen_stock_report_button.place(relx=0.5, rely=0.25, anchor=tk.CENTER)
-            self.terminals[2].output.place(relx=0.5, rely=0.4, anchor=tk.N)
+            self.buttons[2].place(relwidth=0.33, relheight=0.15, relx=0.5, rely=0.25, anchor=tk.CENTER)
+            self.terminals[2].output.place(relwidth=0.9, relheight=0.55, relx=0.5, rely=0.4, anchor=tk.N)
 
         elif index == 6:
-            settings.show_widgets()
-            settings.reset_widgets()
+            self.settings.show_widgets()
+            self.settings.reset_widgets()
