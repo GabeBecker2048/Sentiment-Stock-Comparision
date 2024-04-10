@@ -32,7 +32,7 @@ launch the GUI and ignore all CLI flags except for -settings
 ### Flags
 
 - -nogui : Runs the program in CLI mode
-- -run : Runs the entire program, including the sentiment report, stock report, and analysis
+- -run : Runs the entire program including the sentiment report, stock report, and analysis
 - -settings=directory/to/your/settings.json : Changes the settings file that you are using
 - -settingsmod [settingname]=[newsetting] : Changes a setting
 - -sentiment : Generates the news and sentiment report for the day
