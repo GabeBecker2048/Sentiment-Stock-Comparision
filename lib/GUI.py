@@ -3,7 +3,9 @@ from tkinter import ttk
 from tkinter.scrolledtext import ScrolledText
 from tkinter import filedialog
 import threading
+from math import floor
 from os import listdir
+from PIL import Image, ImageTk
 
 from lib.utils import *
 from lib.settings import Settings
@@ -259,6 +261,48 @@ class csvGUI:
             widget.place_forget()
 
 
+class graphGUI:
+    def __init__(self, right_frame: tk.Frame):
+        self.frame = right_frame
+        self.files = tk.Listbox(self.frame)
+        for i, file in enumerate(listdir("./lib/graphs/")):
+            if file.endswith(".png"):
+                self.files.insert(i, file)
+        self.files.bind('<<ListboxSelect>>', self.on_graph_click)
+
+        self.back_button = tk.Button(self.frame, text="<- Back", command=self.on_back_click)
+        self.graph = None
+        self.graph_widget = tk.Label(self.frame)
+
+    def on_graph_click(self, evt):
+        w = evt.widget
+        index = int(w.curselection()[0])
+        value = w.get(index)
+
+        self.hide_all()
+
+        self.back_button.pack()
+        raw_graph = Image.open(f"./lib/graphs/{value}")
+        graph_width, graph_height = raw_graph.size
+        ratio1, ratio2 = self.frame.winfo_width()/graph_width, self.frame.winfo_height()/graph_height
+        resized_graph = raw_graph.resize((floor(graph_width*ratio1), floor(graph_height*ratio1)))
+        self.graph = ImageTk.PhotoImage(resized_graph)
+        self.graph_widget.config(image=self.graph)
+        self.graph_widget.pack()
+
+    def on_back_click(self):
+        self.hide_all()
+        self.show()
+
+    def hide_all(self):
+        for widget in self.frame.winfo_children():
+            widget.pack_forget()
+            widget.place_forget()
+
+    def show(self):
+        self.files.pack(pady=10, fill=tk.BOTH, expand=True)
+
+
 class Root:
     def __init__(self, filepath: str):
 
@@ -281,6 +325,7 @@ class Root:
 
         self.settings = SettingsGUI(self.right_frame, filepath)
         self.csvGUI = csvGUI(self.right_frame)
+        self.graphGUI = graphGUI(self.right_frame)
 
         self.buttons = [ttk.Button(self.right_frame,
                                    padding=(10, 10),
@@ -340,6 +385,9 @@ class Root:
 
         elif index == 4:
             self.csvGUI.show()
+
+        elif index == 5:
+            self.graphGUI.show()
 
         elif index == 6:
             self.settings.show()
