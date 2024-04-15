@@ -13,7 +13,7 @@ stock_dataset<-read.csv(file_path)
 
 stock_dataset_ordered<- stock_dataset[order(stock_dataset$Ticker),]
 
-coorelation_dataset<-data.frame(
+correlation_dataset<-data.frame(
   Company = c(stock_dataset_ordered$Ticker),
   Old_Price = c(stock_dataset_ordered$Open),
   New_Price = c(stock_dataset_ordered$Close),
@@ -22,13 +22,13 @@ coorelation_dataset<-data.frame(
   Sentiment_Score = c(sentiment_analysis_dataset$sentiment_score)
 )
 
-coorelation_dataset_filtered<-coorelation_dataset%>%
+correlation_dataset_filtered<-correlation_dataset%>%
   filter(Percent_Change<1000000,Percent_Change>-10000000)
-cor.test(coorelation_dataset_filtered$Percent_Change,coorelation_dataset_filtered$Sentiment_Score)
+cor.test(correlation_dataset_filtered$Percent_Change,correlation_dataset_filtered$Sentiment_Score)
 
 correlation_test_result <- cor.test(
-  coorelation_dataset_filtered$Percent_Change,
-  coorelation_dataset_filtered$Sentiment_Score
+  correlation_dataset_filtered$Percent_Change,
+  correlation_dataset_filtered$Sentiment_Score
 )
 
 output_data <- data.frame(
@@ -38,10 +38,10 @@ output_data <- data.frame(
   Conf_Interval_Lower = correlation_test_result$conf.int[1],
   Conf_Interval_Upper = correlation_test_result$conf.int[2],
   Date = date(),
-  Search_Terms = paste(coorelation_dataset_filtered$Company, collapse = ", ")
+  Search_Terms = paste(correlation_dataset_filtered$Company, collapse = ", ")
 )
-write.csv(output_data, file = paste("./lib/csv_data/coorelation_data/coorelation_",today_date,".csv",sep = ""), row.names = FALSE)
+write.csv(output_data, paste("./lib/csv_data/correlation_data/correlation_",today_date,".csv",sep = ""), row.names = FALSE)
 
-ggplot(coorelation_dataset_filtered, aes(x=Sentiment_Score, y=Percent_Change))+ geom_point()+geom_smooth(method=lm)+xlab("Sentiment Score")+ylab("Percent Daily Change")
+ggplot(correlation_dataset_filtered, aes(x=Sentiment_Score, y=Percent_Change))+ geom_point()+geom_smooth(method=lm)+xlab("Sentiment Score")+ylab("Percent Daily Change")
 
-ggsave(paste("./lib/graphs/scatterplot_", today_date, ".png", sep = ""), width = 10, height = 4)
+ggsave(paste("./lib/graphs/correlation_", today_date, ".png", sep = ""), width = 10, height = 4)
