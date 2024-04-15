@@ -3,6 +3,7 @@ from tkinter import ttk
 from tkinter.scrolledtext import ScrolledText
 from tkinter import filedialog
 import threading
+from os import listdir
 
 from lib.utils import *
 from lib.settings import Settings
@@ -27,7 +28,7 @@ class Terminal:
 
 
 class SettingsGUI(Settings):
-    def __init__(self, filepath: str, right_frame: tk.Frame):
+    def __init__(self, right_frame: tk.Frame, filepath: str):
         super().__init__(filepath)
         self.frame = right_frame
         self.widget_list = []
@@ -48,7 +49,8 @@ class SettingsGUI(Settings):
         l1 = tk.Label(self.frame, text="NumArticles:")
         self.widget_list.append(l1)
         self.num_articles_entry.insert(0, str(self["NumArticles"]))
-        self.num_articles_entry.config(validate="key", validatecommand=(self.frame.register(self.validate_num_articles), '%P'))
+        self.num_articles_entry.config(validate="key",
+                                       validatecommand=(self.frame.register(self.validate_num_articles), '%P'))
         self.widget_list.append(self.num_articles_entry)
 
         # RunReport
@@ -82,7 +84,7 @@ class SettingsGUI(Settings):
         search_entries = search_entries[:-1]
         self.search_terms_entry.insert(tk.END, search_entries)
 
-    def reset_widgets(self):
+    def reset(self):
         # Reset widget values to dictionary values
         self.num_articles_entry.delete(0, tk.END)
         self.num_articles_entry.insert(0, str(self["NumArticles"]))
@@ -106,7 +108,7 @@ class SettingsGUI(Settings):
         search_entries = search_entries[:-1]
         self.search_terms_entry.insert(tk.END, search_entries)
 
-    def show_widgets(self):
+    def show(self):
         for widget in self.widget_list:
             widget.pack()
         self.search_terms_entry.pack(fill=tk.BOTH, expand=True)
@@ -146,6 +148,117 @@ class SettingsGUI(Settings):
             return False
 
 
+class csvGUI:
+    def __init__(self, right_frame: tk.Frame):
+        self.frame = right_frame
+
+        # These are the widgets for data browsing
+        self.top = tk.Frame(self.frame)
+        self.bottom = tk.Frame(self.frame)
+
+        button_strs = [
+            "News Data",
+            "Sentiment Data",
+            "Stock Data",
+            "Correlation Data"
+        ]
+        self.data_buttons = [tk.Button(self.top, text=button, command=lambda i=button: self.on_data_button_click(i)) for button in button_strs]
+        self.csv_list = tk.Listbox(self.bottom)
+        self.csv_list.bind('<<ListboxSelect>>', self.on_csv_click)
+
+        # These are the widgets for displaying the csv
+        self.back_button = ttk.Button(self.frame, text="<- Back", command=self.on_back_click)
+        self.tree = ttk.Treeview(self.frame, show="headings")
+        self.cell_display = tk.Label(right_frame, text="", padx=20, pady=10)
+        self.status_label = tk.Label(right_frame, text="", padx=20, pady=10)
+        self.x_scroll = ttk.Scrollbar(self.frame, orient='horizontal', command=self.tree.xview)
+        self.tree.configure(xscrollcommand=self.x_scroll.set)
+
+    def on_data_button_click(self, button: str):
+        self.csv_list.delete(0, tk.END)
+
+        folder = f"./lib/csv_data/{button.lower().replace(' ', '_')}/"
+        for i, file in enumerate(listdir(folder)):
+            if file.endswith(".csv"):
+                self.csv_list.insert(i, file)
+
+    def on_csv_click(self, evt):
+        self.hide_all()
+
+        w = evt.widget
+        index = int(w.curselection()[0])
+        value = w.get(index)
+
+        folder = None
+        if value.startswith("news"):
+            folder = "news_data"
+        elif value.startswith("sentiment"):
+            folder = "sentiment_data"
+        elif value.startswith("prices"):
+            folder = "stock_data"
+        elif value.startswith("correlation") or value.startswith("coorelation"):
+            folder = "correlation_data"
+
+        filepath = f"./lib/csv_data/{folder}/{value}"
+        self.display_csv_data(filepath)
+
+    def on_cell_click(self, event):
+
+        col_id = self.tree.identify_column(event.x)
+        row_id = self.tree.identify_row(event.y)
+
+        cell_value = self.tree.item(row_id)['values'][int(col_id[1:]) - 1]
+        self.cell_display.config(text=str(cell_value))
+
+    def on_back_click(self):
+        self.hide_all()
+        self.show()
+
+    def display_csv_data(self, file_path):
+        self.cell_display.config(text="")
+        try:
+            with open(file_path, 'r', newline='') as file:
+                csv_reader = csv.reader(file)
+                header = next(csv_reader)  # Read the header row
+                self.tree.delete(*self.tree.get_children())  # Clear the current data
+
+                self.tree["columns"] = header
+                for col in header:
+                    self.tree.heading(col, text=col)
+                    self.tree.column(col, width=100)
+
+                for row in csv_reader:
+                    self.tree.insert("", "end", values=row)
+
+                self.status_label.config(text=f"CSV file loaded: {file_path}")
+
+        except Exception as e:
+            self.status_label.config(text=f"Error: {str(e)}")
+
+        # Bind a function to the treeview that gets called when a cell is clicked
+        self.tree.bind("<Button-1>", self.on_cell_click)
+
+        self.back_button.pack(pady=10)
+        self.tree.pack(padx=20, fill="both", expand=True)
+        self.x_scroll.pack(padx=20, fill='x')
+        self.cell_display.pack()
+        self.status_label.pack()
+
+    def show(self):
+        self.top.place(relx=0, rely=0, relwidth=1, relheight=0.3)
+        self.bottom.place(relx=0, rely=0.3, relwidth=1, relheight=0.7)
+
+        for button in self.data_buttons:
+            button.pack()
+
+        self.csv_list.pack(padx=15, pady=15, fill=tk.BOTH, expand=True)
+
+    def hide_all(self):
+        for widget in self.frame.winfo_children():
+            widget.pack_forget()
+            widget.place_forget()
+
+
 class Root:
     def __init__(self, filepath: str):
 
@@ -166,7 +279,8 @@ class Root:
         self.right_frame = ttk.Frame(self.root)
         self.right_frame.pack(side=tk.RIGHT, padx=10, pady=10, fill=tk.BOTH, expand=True)
 
-        self.settings = SettingsGUI(filepath, self.right_frame)
+        self.settings = SettingsGUI(self.right_frame, filepath)
+        self.csvGUI = csvGUI(self.right_frame)
 
         self.buttons = [ttk.Button(self.right_frame,
                                    padding=(10, 10),
@@ -224,6 +338,9 @@ class Root:
             self.buttons[2].place(relwidth=0.33, relheight=0.15, relx=0.5, rely=0.25, anchor=tk.CENTER)
             self.terminals[2].output.place(relwidth=0.9, relheight=0.55, relx=0.5, rely=0.4, anchor=tk.N)
 
+        elif index == 4:
+            self.csvGUI.show()
+
         elif index == 6:
-            self.settings.show_widgets()
-            self.settings.reset_widgets()
+            self.settings.show()
+            self.settings.reset()
