@@ -165,7 +165,7 @@ class csvGUI:
             "Correlation Data"
         ]
         self.data_buttons = [tk.Button(self.top, text=button, command=lambda i=button: self.on_data_button_click(i)) for button in button_strs]
-        self.csv_list = tk.Listbox(self.bottom)
+        self.csv_list = tk.Listbox(self.bottom, exportselection=False)
         self.csv_list.bind('<<ListboxSelect>>', self.on_csv_click)
 
         # These are the widgets for displaying the csv
@@ -264,35 +264,54 @@ class csvGUI:
 class graphGUI:
     def __init__(self, right_frame: tk.Frame):
         self.frame = right_frame
-        self.files = tk.Listbox(self.frame)
+
+        self.selection_prompt = tk.Label(self.frame, text="Select a graph from below")
+        self.files = tk.Listbox(self.frame, exportselection=False)
         for i, file in enumerate(listdir("./lib/graphs/")):
             if file.endswith(".png"):
                 self.files.insert(i, file)
         self.files.bind('<<ListboxSelect>>', self.on_graph_click)
 
         self.back_button = tk.Button(self.frame, text="<- Back", command=self.on_back_click)
+        self.resize_button = tk.Button(self.frame, text="resize", command=self.on_resize_click)
         self.graph = None
+        self.graph_pi = None
         self.graph_widget = tk.Label(self.frame)
 
     def on_graph_click(self, evt):
+
         w = evt.widget
         index = int(w.curselection()[0])
         value = w.get(index)
-
         self.hide_all()
-
         self.back_button.pack()
-        raw_graph = Image.open(f"./lib/graphs/{value}")
-        graph_width, graph_height = raw_graph.size
-        ratio1, ratio2 = self.frame.winfo_width()/graph_width, self.frame.winfo_height()/graph_height
-        resized_graph = raw_graph.resize((floor(graph_width*ratio1), floor(graph_height*ratio1)))
-        self.graph = ImageTk.PhotoImage(resized_graph)
-        self.graph_widget.config(image=self.graph)
+
+        self.graph = Image.open(f"./lib/graphs/{value}")
+        self.resize()
+        self.graph_pi = ImageTk.PhotoImage(self.graph)
+        self.graph_widget.config(image=self.graph_pi)
         self.graph_widget.pack()
+
+        self.resize_button.pack()
 
     def on_back_click(self):
         self.hide_all()
         self.show()
+
+    def resize(self):
+        graph_width, graph_height = self.graph.size
+        bounding_side = max((graph_height, graph_width))
+        ratio = self.frame.winfo_width()/bounding_side
+        self.graph = self.graph.resize((floor(graph_width*ratio), floor(graph_height*ratio)))
+        self.graph_pi = ImageTk.PhotoImage(self.graph)
+        self.graph_widget.config(image=self.graph_pi)
+
+    def on_resize_click(self):
+        self.hide_all()
+        self.resize()
+        self.back_button.pack()
+        self.graph_widget.pack()
+        self.resize_button.pack()
 
     def hide_all(self):
         for widget in self.frame.winfo_children():
@@ -300,6 +319,7 @@ class graphGUI:
             widget.place_forget()
 
     def show(self):
+        self.selection_prompt.pack(pady=35)
         self.files.pack(pady=10, fill=tk.BOTH, expand=True)
 
 
