@@ -265,14 +265,14 @@ class csvGUI:
         self.top.place(relx=0, rely=0, relwidth=1, relheight=0.3)
         self.bottom.place(relx=0, rely=0.3, relwidth=1, relheight=0.7)
 
-        self.data_button_frames[0].place(relx=0, rely=0, relwidth=0.25)
-        self.data_button_frames[1].place(relx=0.25, rely=0, relwidth=0.25)
-        self.data_button_frames[2].place(relx=0.5, rely=0, relwidth=0.25)
-        self.data_button_frames[3].place(relx=0.75, rely=0, relwidth=0.25)
+        self.data_button_frames[0].place(relx=0, rely=0, relwidth=0.25, relheight=1)
+        self.data_button_frames[1].place(relx=0.25, rely=0, relwidth=0.25, relheight=1)
+        self.data_button_frames[2].place(relx=0.5, rely=0, relwidth=0.25, relheight=1)
+        self.data_button_frames[3].place(relx=0.75, rely=0, relwidth=0.25, relheight=1)
 
         for button, label in zip(self.data_buttons, self.data_button_labels):
-            button.pack()
-            label.pack()
+            button.place(relx=0.5, rely=0.4, relwidth=0.55, relheight=0.75, anchor=tk.CENTER)
+            label.place(relx=0.5, rely=0.9, anchor=tk.CENTER)
 
         self.csv_list.pack(padx=15, pady=15, fill=tk.BOTH, expand=True)
 
