@@ -164,7 +164,26 @@ class csvGUI:
             "Stock Data",
             "Correlation Data"
         ]
-        self.data_buttons = [tk.Button(self.top, text=button, command=lambda i=button: self.on_data_button_click(i)) for button in button_strs]
+        self.data_button_icons = [
+            ImageTk.PhotoImage(Image.open("./img/news.png")),
+            ImageTk.PhotoImage(Image.open("./img/sentiment.png")),
+            ImageTk.PhotoImage(Image.open("./img/stock.png")),
+            ImageTk.PhotoImage(Image.open("./img/correlation.png"))
+            ]
+        self.data_buttons = []
+        for button, icon in zip(button_strs, self.data_button_icons):
+            self.data_buttons.append(tk.Button(self.top,
+                                               text=button,
+                                               image=icon,
+                                               command=lambda i=button: self.on_data_button_click(i)))
+
+        self.data_button_labels = [
+            tk.Label(self.top, text="News"),
+            tk.Label(self.top, text="Sentiment"),
+            tk.Label(self.top, text="Stock"),
+            tk.Label(self.top, text="Correlation")
+        ]
+
         self.csv_list = tk.Listbox(self.bottom, exportselection=False)
         self.csv_list.bind('<<ListboxSelect>>', self.on_csv_click)
 
@@ -250,8 +269,14 @@ class csvGUI:
         self.top.place(relx=0, rely=0, relwidth=1, relheight=0.3)
         self.bottom.place(relx=0, rely=0.3, relwidth=1, relheight=0.7)
 
-        for button in self.data_buttons:
-            button.pack()
+        self.data_buttons[0].place(relx=0.05, rely=0)
+        self.data_buttons[1].place(relx=0.3, rely=0)
+        self.data_buttons[2].place(relx=0.55, rely=0)
+        self.data_buttons[3].place(relx=0.8, rely=0)
+        self.data_button_labels[0].place(relx=0.12, rely=0.85, anchor=tk.CENTER)
+        self.data_button_labels[1].place(relx=0.37, rely=0.85, anchor=tk.CENTER)
+        self.data_button_labels[2].place(relx=0.62, rely=0.85, anchor=tk.CENTER)
+        self.data_button_labels[3].place(relx=0.87, rely=0.85, anchor=tk.CENTER)
 
         self.csv_list.pack(padx=15, pady=15, fill=tk.BOTH, expand=True)
 
