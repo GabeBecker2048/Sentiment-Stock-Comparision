@@ -299,6 +299,7 @@ class graphGUI:
 
         self.back_button = tk.Button(self.frame, text="<- Back", command=self.on_back_click)
         self.resize_button = tk.Button(self.frame, text="resize", command=self.on_resize_click)
+        self.file_label = tk.Label(self.frame, text="")
         self.graph = None
         self.graph_pi = None
         self.graph_widget = tk.Label(self.frame)
@@ -311,13 +312,17 @@ class graphGUI:
         self.hide_all()
         self.back_button.pack()
 
-        self.graph = Image.open(f"./lib/graphs/{value}")
+        filepath = f"./lib/graphs/{value}"
+        self.file_label.config(text=filepath)
+        self.graph = Image.open(filepath)
         self.resize()
         self.graph_pi = ImageTk.PhotoImage(self.graph)
         self.graph_widget.config(image=self.graph_pi)
         self.graph_widget.pack()
 
         self.resize_button.pack()
+
+        self.file_label.pack(pady=20)
 
     def on_back_click(self):
         self.hide_all()
