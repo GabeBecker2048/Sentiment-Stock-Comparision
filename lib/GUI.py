@@ -158,11 +158,12 @@ class csvGUI:
         self.top = tk.Frame(self.frame)
         self.bottom = tk.Frame(self.frame)
 
+        self.data_button_frames = [tk.Frame(self.top) for i in range(4)]
         button_strs = [
-            "News Data",
-            "Sentiment Data",
-            "Stock Data",
-            "Correlation Data"
+            "News",
+            "Sentiment",
+            "Stock",
+            "Correlation"
         ]
         self.data_button_icons = [
             ImageTk.PhotoImage(Image.open("./img/news.png")),
@@ -171,18 +172,13 @@ class csvGUI:
             ImageTk.PhotoImage(Image.open("./img/correlation.png"))
             ]
         self.data_buttons = []
-        for button, icon in zip(button_strs, self.data_button_icons):
-            self.data_buttons.append(tk.Button(self.top,
+        self.data_button_labels = []
+        for frame, button, icon in zip(self.data_button_frames, button_strs, self.data_button_icons):
+            self.data_buttons.append(tk.Button(frame,
                                                text=button,
                                                image=icon,
                                                command=lambda i=button: self.on_data_button_click(i)))
-
-        self.data_button_labels = [
-            tk.Label(self.top, text="News"),
-            tk.Label(self.top, text="Sentiment"),
-            tk.Label(self.top, text="Stock"),
-            tk.Label(self.top, text="Correlation")
-        ]
+            self.data_button_labels.append(tk.Label(frame, text=button))
 
         self.csv_list = tk.Listbox(self.bottom, exportselection=False)
         self.csv_list.bind('<<ListboxSelect>>', self.on_csv_click)
@@ -198,7 +194,7 @@ class csvGUI:
     def on_data_button_click(self, button: str):
         self.csv_list.delete(0, tk.END)
 
-        folder = f"./lib/csv_data/{button.lower().replace(' ', '_')}/"
+        folder = f"./lib/csv_data/{button.lower() + '_data'}/"
         for i, file in enumerate(listdir(folder)):
             if file.endswith(".csv"):
                 self.csv_list.insert(i, file)
@@ -269,14 +265,14 @@ class csvGUI:
         self.top.place(relx=0, rely=0, relwidth=1, relheight=0.3)
         self.bottom.place(relx=0, rely=0.3, relwidth=1, relheight=0.7)
 
-        self.data_buttons[0].place(relx=0.05, rely=0)
-        self.data_buttons[1].place(relx=0.3, rely=0)
-        self.data_buttons[2].place(relx=0.55, rely=0)
-        self.data_buttons[3].place(relx=0.8, rely=0)
-        self.data_button_labels[0].place(relx=0.12, rely=0.85, anchor=tk.CENTER)
-        self.data_button_labels[1].place(relx=0.37, rely=0.85, anchor=tk.CENTER)
-        self.data_button_labels[2].place(relx=0.62, rely=0.85, anchor=tk.CENTER)
-        self.data_button_labels[3].place(relx=0.87, rely=0.85, anchor=tk.CENTER)
+        self.data_button_frames[0].place(relx=0, rely=0, relwidth=0.25)
+        self.data_button_frames[1].place(relx=0.25, rely=0, relwidth=0.25)
+        self.data_button_frames[2].place(relx=0.5, rely=0, relwidth=0.25)
+        self.data_button_frames[3].place(relx=0.75, rely=0, relwidth=0.25)
+
+        for button, label in zip(self.data_buttons, self.data_button_labels):
+            button.pack()
+            label.pack()
 
         self.csv_list.pack(padx=15, pady=15, fill=tk.BOTH, expand=True)
 
@@ -290,11 +286,9 @@ class graphGUI:
     def __init__(self, right_frame: tk.Frame):
         self.frame = right_frame
 
-        self.selection_prompt = tk.Label(self.frame, text="Select a graph from below")
+        self.selection_prompt = tk.Label(self.frame, text="Select a graph from below\n\n" +
+                                                          "Fullscreen recommended for graph viewing")
         self.files = tk.Listbox(self.frame, exportselection=False)
-        for i, file in enumerate(listdir("./lib/graphs/")):
-            if file.endswith(".png"):
-                self.files.insert(i, file)
         self.files.bind('<<ListboxSelect>>', self.on_graph_click)
 
         self.back_button = tk.Button(self.frame, text="<- Back", command=self.on_back_click)
@@ -310,7 +304,8 @@ class graphGUI:
         index = int(w.curselection()[0])
         value = w.get(index)
         self.hide_all()
-        self.back_button.pack()
+        self.back_button.pack(pady=(5,10))
+        self.resize_button.pack(pady=5)
 
         filepath = f"./lib/graphs/{value}"
         self.file_label.config(text=filepath)
@@ -319,8 +314,6 @@ class graphGUI:
         self.graph_pi = ImageTk.PhotoImage(self.graph)
         self.graph_widget.config(image=self.graph_pi)
         self.graph_widget.pack()
-
-        self.resize_button.pack()
 
         self.file_label.pack(pady=20)
 
@@ -338,10 +331,12 @@ class graphGUI:
 
     def on_resize_click(self):
         self.hide_all()
+        self.graph = Image.open(self.file_label["text"])
         self.resize()
-        self.back_button.pack()
+        self.back_button.pack(pady=(5, 10))
+        self.resize_button.pack(pady=5)
         self.graph_widget.pack()
-        self.resize_button.pack()
+        self.file_label.pack()
 
     def hide_all(self):
         for widget in self.frame.winfo_children():
@@ -349,6 +344,10 @@ class graphGUI:
             widget.place_forget()
 
     def show(self):
+        self.files.delete(0, tk.END)
+        for i, file in enumerate(listdir("./lib/graphs/")):
+            if file.endswith(".png"):
+                self.files.insert(i, file)
         self.selection_prompt.pack(pady=35)
         self.files.pack(pady=10, fill=tk.BOTH, expand=True)
 
