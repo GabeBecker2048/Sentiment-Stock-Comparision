@@ -170,7 +170,7 @@ class csvGUI:
             ImageTk.PhotoImage(Image.open("./img/sentiment.png")),
             ImageTk.PhotoImage(Image.open("./img/stock.png")),
             ImageTk.PhotoImage(Image.open("./img/correlation.png"))
-            ]
+        ]
         self.data_buttons = []
         self.data_button_labels = []
         for frame, button, icon in zip(self.data_button_frames, button_strs, self.data_button_icons):
@@ -180,6 +180,7 @@ class csvGUI:
                                                command=lambda i=button: self.on_data_button_click(i)))
             self.data_button_labels.append(tk.Label(frame, text=button))
 
+        self.show_all_button = tk.Button(self.bottom, text="show all", command=self.on_show_all_click)
         self.csv_list = tk.Listbox(self.bottom, exportselection=False)
         self.csv_list.bind('<<ListboxSelect>>', self.on_csv_click)
 
@@ -198,6 +199,15 @@ class csvGUI:
         for i, file in enumerate(listdir(folder)):
             if file.endswith(".csv"):
                 self.csv_list.insert(i, file)
+
+    def on_show_all_click(self):
+        self.csv_list.delete(0, tk.END)
+
+        for data_type in ["news", "sentiment", "stock", "correlation"]:
+            folder = f"./lib/csv_data/{data_type.lower() + '_data'}/"
+            for i, file in enumerate(listdir(folder)):
+                if file.endswith(".csv"):
+                    self.csv_list.insert(i, file)
 
     def on_csv_click(self, evt):
         self.hide_all()
@@ -272,8 +282,9 @@ class csvGUI:
 
         for button, label in zip(self.data_buttons, self.data_button_labels):
             button.place(relx=0.5, rely=0.4, relwidth=0.55, relheight=0.75, anchor=tk.CENTER)
-            label.place(relx=0.5, rely=0.9, anchor=tk.CENTER)
+            label.place(relx=0.5, rely=0.85, anchor=tk.CENTER)
 
+        self.show_all_button.pack()
         self.csv_list.pack(padx=15, pady=15, fill=tk.BOTH, expand=True)
 
     def hide_all(self):
@@ -286,9 +297,29 @@ class graphGUI:
     def __init__(self, right_frame: tk.Frame):
         self.frame = right_frame
 
-        self.selection_prompt = tk.Label(self.frame, text="Select a graph from below\n\n" +
-                                                          "Fullscreen recommended for graph viewing")
-        self.files = tk.Listbox(self.frame, exportselection=False)
+        self.top = tk.Frame(self.frame)
+        self.bottom = tk.Frame(self.frame)
+
+        self.graph_button_frames = [tk.Frame(self.top) for i in range(2)]
+        button_strs = [
+            "Sentiment",
+            "Correlation"
+        ]
+        self.graph_button_icons = [
+            ImageTk.PhotoImage(Image.open("./img/sentiment.png")),
+            ImageTk.PhotoImage(Image.open("./img/correlation.png"))
+        ]
+        self.graph_buttons = []
+        self.graph_button_labels = []
+        for frame, button, icon in zip(self.graph_button_frames, button_strs, self.graph_button_icons):
+            self.graph_buttons.append(tk.Button(frame,
+                                                text=button,
+                                                image=icon,
+                                                command=lambda i=button: self.on_graph_button_click(i)))
+            self.graph_button_labels.append(tk.Label(frame, text=button))
+
+        self.show_all_button = tk.Button(self.bottom, text="show all", command=self.on_show_all_click)
+        self.files = tk.Listbox(self.bottom, exportselection=False)
         self.files.bind('<<ListboxSelect>>', self.on_graph_click)
 
         self.back_button = tk.Button(self.frame, text="<- Back", command=self.on_back_click)
@@ -298,13 +329,27 @@ class graphGUI:
         self.graph_pi = None
         self.graph_widget = tk.Label(self.frame)
 
+    def on_graph_button_click(self, button: str):
+        self.files.delete(0, tk.END)
+
+        for i, file in enumerate(listdir("./lib/graphs/")):
+            if file.startswith(button.lower()) and file.endswith(".png"):
+                self.files.insert(i, file)
+
+    def on_show_all_click(self):
+        self.files.delete(0, tk.END)
+
+        for i, file in enumerate(listdir("./lib/graphs/")):
+            if file.endswith(".png"):
+                self.files.insert(i, file)
+
     def on_graph_click(self, evt):
 
         w = evt.widget
         index = int(w.curselection()[0])
         value = w.get(index)
         self.hide_all()
-        self.back_button.pack(pady=(5,10))
+        self.back_button.pack(pady=(5, 10))
         self.resize_button.pack(pady=5)
 
         filepath = f"./lib/graphs/{value}"
@@ -324,8 +369,8 @@ class graphGUI:
     def resize(self):
         graph_width, graph_height = self.graph.size
         bounding_side = max((graph_height, graph_width))
-        ratio = self.frame.winfo_width()/bounding_side
-        self.graph = self.graph.resize((floor(graph_width*ratio), floor(graph_height*ratio)))
+        ratio = self.frame.winfo_width() / bounding_side
+        self.graph = self.graph.resize((floor(graph_width * ratio), floor(graph_height * ratio)))
         self.graph_pi = ImageTk.PhotoImage(self.graph)
         self.graph_widget.config(image=self.graph_pi)
 
@@ -344,11 +389,17 @@ class graphGUI:
             widget.place_forget()
 
     def show(self):
-        self.files.delete(0, tk.END)
-        for i, file in enumerate(listdir("./lib/graphs/")):
-            if file.endswith(".png"):
-                self.files.insert(i, file)
-        self.selection_prompt.pack(pady=35)
+        self.top.place(relx=0, rely=0, relheight=0.3, relwidth=1)
+        self.bottom.place(relx=0, rely=0.3, relheight=0.7, relwidth=1)
+
+        self.graph_button_frames[0].place(relx=0, rely=0, relwidth=0.5, relheight=1)
+        self.graph_button_frames[1].place(relx=0.5, rely=0, relwidth=0.5, relheight=1)
+
+        for button, label in zip(self.graph_buttons, self.graph_button_labels):
+            button.place(relx=0.5, rely=0.4, relwidth=0.55, relheight=0.75, anchor=tk.CENTER)
+            label.place(relx=0.5, rely=0.85, anchor=tk.CENTER)
+
+        self.show_all_button.pack()
         self.files.pack(pady=10, fill=tk.BOTH, expand=True)
 
 
