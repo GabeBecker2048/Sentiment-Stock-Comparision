@@ -1,4 +1,4 @@
-from lib.GUI import Root
+#from lib.GUI import Root
 from lib.settings import Settings
 from lib.utils import *
 from sys import argv
@@ -18,10 +18,10 @@ def main():
     # This detects if we are using the GUI or the non-GUI version
     # if '-nogui' is added, then this processes CLI commands
     # SYNTAX: -nogui
-    if '-nogui' not in largv:
-        root = Root(settings_filename)
-        root.root.mainloop()
-        return  # no other arguments are accepted
+    # if '-nogui' not in largv:
+    #     root = Root(settings_filename)
+    #     root.root.mainloop()
+    #     return  # no other arguments are accepted
 
     # ------------------------------------------
     # Everything below here only runs in the CLI
