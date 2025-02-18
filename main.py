@@ -39,19 +39,22 @@ def main():
                 print(f"The settings at '{settings_filename}' have been adjusted! {argv[i+1]}")
 
         # these flags are the ones that add functionality to the CLI
-        elif '-run' == larg:
+        elif '--run' == larg:
             run_all(CLI_Settings)
 
-        elif '-news' == larg:
+        elif '--news' == larg:
             generate_articles(CLI_Settings)
 
-        elif '-sentiment' == larg:
+        elif '--trends' == larg:
+            generate_trends(CLI_Settings)
+
+        elif '--sentiment' == larg:
             generate_sentiment_report(CLI_Settings)
 
-        elif '-sentimentonly' == larg:
+        elif '--sentimentonly' == larg:
             generate_sentiment_report(CLI_Settings, gen_articles=False)
 
-        elif '-stock' == larg:
+        elif '--stock' == larg:
             generate_stock_report(CLI_Settings)
 
 
