@@ -1,2 +1,7 @@
 gnews
 yfinance
+pytrends
+torch
+transformers
+matplotlib
+scipy
