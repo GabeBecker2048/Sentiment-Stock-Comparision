@@ -3,7 +3,6 @@ import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
 import datetime
 
-# ...existing code for setup if any...
 today_date = datetime.date.today().strftime("%Y-%m-%d")
 
 # Read the sentiment CSV
@@ -11,6 +10,7 @@ file_path = f"./lib/csv_data/sentiment_data/sentiment_{today_date}.csv"
 df = pd.read_csv(file_path)
 
 # Plot sentiment score
+print("Plotting sentiment score...")
 norm = mcolors.Normalize(vmin=df['sentiment_score'].min(), vmax=df['sentiment_score'].max())
 cmap = plt.cm.RdYlGn
 colors = cmap(norm(df['sentiment_score']))
@@ -24,8 +24,10 @@ plt.ylabel("Sentiment Score")
 plt.tight_layout()
 plt.savefig(f"./lib/graphs/sentiment_{today_date}.png")
 plt.close()
+print("Sentiment score graphed!")
 
 # Plot sentiment intensity
+print("Plotting sentiment intensity...")
 norm_intensity = mcolors.Normalize(vmin=df['sentiment_intensity'].min(), vmax=df['sentiment_intensity'].max())
 colors_intensity = cmap(norm_intensity(df['sentiment_intensity']))
 
@@ -38,3 +40,4 @@ plt.ylabel("Sentiment Intensity")
 plt.tight_layout()
 plt.savefig(f"./lib/graphs/sentiment_intensity_{today_date}.png")
 plt.close()
+print("Sentiment intensity graphed!")

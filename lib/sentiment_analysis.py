@@ -41,9 +41,9 @@ for _, row in df.iterrows():
             continue
         # Process full headline (strip whitespace)
         text = str(article).strip()
-        print(text)
+        #print(text)
         result = sa_pipeline(text)[0]
-        print(result)
+        #print(result)
         score = result["score"]
         
         # Update counts and intensities
