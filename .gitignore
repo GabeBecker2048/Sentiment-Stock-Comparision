@@ -1,1 +1,15 @@
 venv
+
+lib/correlation_data/*
+!lib/correlation_data/*example.csv
+
+lib/news_data/*
+!lib/news_data/*example.csv
+
+lib/sentiment_data/*
+!lib/sentiment_data/*example.csv
+
+lib/stock_data/*
+!lib/stock_data/*example.csv
+
+**/.DS_Store
