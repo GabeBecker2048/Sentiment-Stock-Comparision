@@ -5,10 +5,9 @@ from datetime import datetime
 from gnews import GNews
 import yfinance as yf
 
-from lib.settings import Settings
-
 
 # This function runs an R Script in Python
+"""
 def run_R_Script(r_script_path: str, RScriptLocation: str = "Rscript", outstream=None):
     print(f"\tRunning {r_script_path}...\n", file=outstream)
 
@@ -22,16 +21,17 @@ def run_R_Script(r_script_path: str, RScriptLocation: str = "Rscript", outstream
     print(f"Errors: {errors}\n", file=outstream)
 
     print(f"\tFinished running {r_script_path}!\n", file=outstream)
+"""
 
 
-def generate_articles(settings: Settings, outstream=None):
+def generate_articles(cfg, logger):
 
     try:
-        print("Generating articles...", file=outstream)
+        print("Generating articles...")
 
         # Configuration
         news = GNews()
-        news.max_results = settings["NumArticles"]
+        news.max_results = cfg["news"]["num_articles"]
 
         # before iterating through the search terms, we must first see what the maximum number of articles is:
         max_articles = max(len(searchlist) for searchlist in settings["SearchTerms"].values()) * settings["NumArticles"]

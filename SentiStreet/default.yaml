@@ -1,0 +1,12 @@
+format:
+  output_dir: "/home/SentiStreet/out/{YYYY}/{MM}/{DD}/{stock}/"
+  output_formats: ["csv", "parquet"]
+
+prices:
+  index: "S&P500"
+
+news:
+  num_articles: 100
+
+correlation:
+  gen_graphs: True
